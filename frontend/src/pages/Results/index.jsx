@@ -337,27 +337,32 @@ function Results() {
     return (
         <>
             <Header />
-            <div className="container-fluid px-4 mt-5">
+            <main style={{ flex: 1 }}>
+                <div className="container-fluid px-4 mt-5">
 
                 {/* City Information Section */}
-                <div className="section-container mb-5">
-                    <div className="citysearch row align-items-center">
-                        <div className="flag-space col-lg-4 text-center">
-                            <div className="flag mx-auto" style={{ backgroundImage: `url(${cityInfo.flag})` }}></div>
-                            <h5 className="mt-4">{city}</h5>
+                <div className="city-info-wrapper mb-5">
+                    <div className="row align-items-start">
+                        <div className="col-lg-8">
+                            <div className="section-container">
+                                <div className="flag-and-text-container">
+                                    <div className="flag-space text-center mb-4">
+                                        <div className="flag mx-auto" style={{ backgroundImage: `url(${cityInfo.flag})` }}></div>
+                                        <h5 className="mt-3">{city}</h5>
+                                    </div>
+                                    <div className="city-text-below">
+                                        <p className="city-presentation">{cityInfo.description}</p>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <div className="city-text col-lg-8">
-                            <p className="city-presentation">{cityInfo.description}</p>
-                        </div>
-                    </div>
-                </div>
-
-                {/* Tragedy Chart Section */}
-                <div className="section-container mb-5">
-                    <h2 className="text-center mb-4">Gráfico de Tragédias</h2>
-                    <div className="d-flex justify-content-center">
-                        <div className="chart-container">
-                            <Doughnut data={chartData} />
+                        <div className="col-lg-4">
+                            <div className="tragedy-chart-section">
+                                <h4 className="text-center mb-3">Gráfico de Tragédias</h4>
+                                <div className="chart-container-inline">
+                                    <Doughnut data={chartData} />
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -403,6 +408,7 @@ function Results() {
                     </div>
                 </div>
             </div>
+            </main>
             <Footer />
         </>
     );

@@ -1,0 +1,29 @@
+.no-results {
+    min-height: 60vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.no-results h1 {
+    color: #003366;
+}
+
+.no-results p {
+    max-width: 640px;
+    margin: 0 auto 2rem auto;
+}
+
+.no-results .btn-primary {
+    padding: 0.6rem 2.5rem;
+    font-size: 1rem;
+    font-weight: 500;
+    border-radius: 8px;
+    min-width: 240px;
+    transition: all 0.3s ease;
+}
+
+.no-results .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(13, 110, 253, 0.3);
+}

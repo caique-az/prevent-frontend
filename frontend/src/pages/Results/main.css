@@ -199,3 +199,67 @@
     font-size: 0.95rem;
     line-height: 1.6;
 }
+
+/* Tragedy Chart Section - Inline with flag */
+.tragedy-chart-section {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    padding: 1rem;
+}
+
+.tragedy-chart-section h4 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #2c3e50;
+    margin-bottom: 1rem;
+}
+
+.chart-container-inline {
+    max-width: 280px;
+    max-height: 280px;
+    width: 100%;
+    height: auto;
+    margin: 0 auto;
+}
+
+.city-info-wrapper {
+    padding: 1rem 0;
+}
+
+.flag-and-text-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.city-text-below {
+    padding: 0 1rem;
+}
+
+.city-text-below .city-presentation {
+    font-size: 1.05rem;
+    line-height: 1.8;
+    color: #333;
+    text-align: justify;
+}
+
+/* Responsive adjustments */
+@media (max-width: 991px) {
+    .tragedy-chart-section {
+        margin-top: 2rem;
+        padding-top: 2rem;
+        border-top: 1px solid #e0e0e0;
+    }
+    
+    .chart-container-inline {
+        max-width: 300px;
+        max-height: 300px;
+    }
+    
+    .city-text-below {
+        padding: 0;
+    }
+}

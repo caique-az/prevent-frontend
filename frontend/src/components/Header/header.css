@@ -38,3 +38,74 @@
     color: #ffff;
     transition: background-color 0.5s ease;
 }
+
+.search-button {
+    border: none;
+    background: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 8px;
+    cursor: pointer;
+    color: #4b4b4b;
+}
+
+.search-button:focus {
+    outline: none;
+}
+
+.search-active {
+    border-radius: 20px 20px 0 0 !important;
+    border-bottom-color: transparent !important;
+}
+
+.search-suggestions {
+    position: absolute;
+    z-index: 10;
+    top: calc(100% - 1px);
+    left: -1px;
+    right: -1px;
+    background-color: #ffffff;
+    border: 1px solid #ccc;
+    border-top: none;
+    border-radius: 0 0 20px 20px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+    list-style: none;
+    padding: 8px 0 12px 0;
+    max-height: 240px;
+    overflow-y: auto;
+    animation: slideDown 0.2s ease-out;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.search-suggestions li {
+    padding: 10px 16px;
+    cursor: pointer;
+    font-size: 0.95rem;
+    color: #333;
+    transition: background-color 0.15s ease, padding-left 0.15s ease;
+}
+
+.search-suggestions li:hover {
+    background-color: #f0f7ff;
+    padding-left: 20px;
+}
+
+.search-suggestions li:first-child {
+    padding-top: 12px;
+}
+
+.search-suggestions li:last-child {
+    border-radius: 0 0 18px 18px;
+    padding-bottom: 12px;
+}
