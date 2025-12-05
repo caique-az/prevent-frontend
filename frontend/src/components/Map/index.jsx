@@ -1,4 +1,5 @@
-import { MapContainer, TileLayer, Marker, Popup, Polygon, Tooltip } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, Popup, Polygon, Tooltip, useMap } from 'react-leaflet';
+import { useEffect } from 'react';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 
@@ -9,6 +10,21 @@ L.Icon.Default.mergeOptions({
   shadowUrl: new URL('leaflet/dist/images/marker-shadow.png', import.meta.url),
 });
 
+function MapUpdater({ center, zoom }) {
+  const map = useMap();
+  
+  useEffect(() => {
+    if (center) {
+      map.setView(center, zoom || 15, {
+        animate: true,
+        duration: 1
+      });
+    }
+  }, [center, zoom, map]);
+  
+  return null;
+}
+
 function MapComponent({ center = [-20.65, -41.91], zoom = 13, riskAreas = [] }) {
   return (
     <MapContainer center={center} zoom={zoom} style={{ height: '100%', width: '100%' }}>
@@ -16,6 +32,8 @@ function MapComponent({ center = [-20.65, -41.91], zoom = 13, riskAreas = [] }) 
         attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
+      
+      <MapUpdater center={center} zoom={zoom} />
 
       {riskAreas.map((area, index) => (
         <Polygon 

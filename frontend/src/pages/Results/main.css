@@ -246,6 +246,38 @@
     text-align: justify;
 }
 
+/* Neighborhood cards - clickable */
+.neighborhood-card {
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.neighborhood-card:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2) !important;
+    border: 2px solid #0c6681;
+}
+
+.neighborhood-card:active {
+    transform: translateY(-4px) scale(1.01);
+}
+
+.neighborhood-card::after {
+    content: '📍 Ver no mapa';
+    position: absolute;
+    bottom: 10px;
+    right: 15px;
+    font-size: 0.75rem;
+    color: #0c6681;
+    font-weight: 600;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.neighborhood-card:hover::after {
+    opacity: 1;
+}
+
 /* Responsive adjustments */
 @media (max-width: 991px) {
     .tragedy-chart-section {
@@ -261,5 +293,11 @@
     
     .city-text-below {
         padding: 0;
+    }
+    
+    .neighborhood-card::after {
+        font-size: 0.7rem;
+        bottom: 8px;
+        right: 10px;
     }
 }
