@@ -10,10 +10,10 @@ import { Link, useNavigate } from 'react-router-dom';
 
 function Header() {
     const [searchTerm, setSearchTerm] = useState('');
+    const [isClosing, setIsClosing] = useState(false);
     const navigate = useNavigate();
 
     const estadoMap = {
-
         'sao paulo': 'São Paulo',
         'são paulo': 'São Paulo',
         'sp': 'São Paulo',
@@ -21,6 +21,39 @@ function Header() {
         'rj': 'Rio de Janeiro',
         'minas gerais': 'Minas Gerais',
         'mg': 'Minas Gerais',
+    };
+
+    // Mapa de bairros para estados
+    const bairroToEstado = {
+        // Minas Gerais
+        'beira rio': 'Minas Gerais',
+        'morro do valtair': 'Minas Gerais',
+        'bairro novo horizonte': 'Minas Gerais',
+        'novo horizonte': 'Minas Gerais',
+        'alto da serra': 'Minas Gerais',
+        'jardim das aguas': 'Minas Gerais',
+        'jardim das águas': 'Minas Gerais',
+        'vale verde': 'Minas Gerais',
+        
+        // São Paulo
+        'vila mariana': 'São Paulo',
+        'lapa': 'São Paulo',
+        'pinheiros': 'São Paulo',
+        'mooca': 'São Paulo',
+        'itaim bibi': 'São Paulo',
+        'itaim': 'São Paulo',
+        'butanta': 'São Paulo',
+        'butantã': 'São Paulo',
+        
+        // Rio de Janeiro
+        'copacabana': 'Rio de Janeiro',
+        'jardim botanico': 'Rio de Janeiro',
+        'jardim botânico': 'Rio de Janeiro',
+        'centro': 'Rio de Janeiro',
+        'grajau': 'Rio de Janeiro',
+        'grajaú': 'Rio de Janeiro',
+        'ipanema': 'Rio de Janeiro',
+        'leblon': 'Rio de Janeiro',
     };
 
     const availableEstados = ['São Paulo', 'Rio de Janeiro', 'Minas Gerais'];
@@ -38,13 +71,26 @@ function Header() {
         const value = searchTerm.trim().toLowerCase();
         if (!value) return;
 
-        const matchedEstado = estadoMap[value];
+        // Normalizar o valor de busca
+        const normalizedValue = value.normalize('NFD').replace(/[^\w\s]/g, '').toLowerCase();
 
+        // Primeiro, tentar encontrar um estado
+        const matchedEstado = estadoMap[value];
         if (matchedEstado) {
             navigate(`/results/${matchedEstado}`);
             return;
         }
 
+        // Se não encontrou estado, tentar encontrar um bairro
+        const matchedBairro = bairroToEstado[value] || 
+                             bairroToEstado[normalizedValue];
+        
+        if (matchedBairro) {
+            navigate(`/results/${matchedBairro}`);
+            return;
+        }
+
+        // Se não encontrou nada, ir para página de sem resultados
         navigate('/no-results');
     };
 
@@ -67,15 +113,18 @@ function Header() {
                     <div className={`search ms-4 position-relative ${(() => {
                         const term = searchTerm.trim();
                         if (!term) return '';
-                        const filtered = availableEstados.filter((estado) =>
+                        const filteredEstados = availableEstados.filter((estado) =>
                             normalizedIncludes(estado, term)
                         );
-                        return filtered.length > 0 ? 'search-active' : '';
+                        const filteredBairros = Object.keys(bairroToEstado).filter((bairro) =>
+                            normalizedIncludes(bairro, term)
+                        );
+                        return filteredEstados.length > 0 || filteredBairros.length > 0 ? 'search-active' : '';
                     })()}`}>
                         <input
                             type="text"
                             id="searchinput"
-                            placeholder="Pesquisar estado (ex: SP, Rio de Janeiro)"
+                            placeholder="Pesquisar estado ou bairro (ex: SP, Leblon, Copacabana)"
                             value={searchTerm}
                             onChange={(event) => setSearchTerm(event.target.value)}
                             onKeyDown={handleKeyDown}
@@ -94,25 +143,57 @@ function Header() {
                             const term = searchTerm.trim();
                             if (!term) return null;
 
-                            const filtered = availableEstados.filter((estado) =>
+                            const filteredEstados = availableEstados.filter((estado) =>
                                 normalizedIncludes(estado, term)
                             );
 
-                            if (filtered.length === 0) return null;
+                            const filteredBairros = Object.keys(bairroToEstado)
+                                .filter((bairro) => normalizedIncludes(bairro, term))
+                                .map(bairro => ({
+                                    name: bairro.split(' ').map(word => 
+                                        word.charAt(0).toUpperCase() + word.slice(1)
+                                    ).join(' '),
+                                    estado: bairroToEstado[bairro]
+                                }));
+
+                            if (filteredEstados.length === 0 && filteredBairros.length === 0) return null;
 
                             return (
-                                <ul className="search-suggestions">
-                                    {filtered.map((estado) => (
-                                        <li
-                                            key={estado}
-                                            onClick={() => {
-                                                navigate(`/results/${estado}`);
-                                                setSearchTerm(estado);
-                                            }}
-                                        >
-                                            {estado}
-                                        </li>
-                                    ))}
+                                <ul className={`search-suggestions ${isClosing ? 'closing' : ''}`}>
+                                    {filteredEstados.length > 0 && (
+                                        <>
+                                            <li className="suggestion-category">Estados</li>
+                                            {filteredEstados.map((estado) => (
+                                                <li
+                                                    key={estado}
+                                                    className="suggestion-item"
+                                                    onClick={() => {
+                                                        navigate(`/results/${estado}`);
+                                                        setSearchTerm('');
+                                                    }}
+                                                >
+                                                    📍 {estado}
+                                                </li>
+                                            ))}
+                                        </>
+                                    )}
+                                    {filteredBairros.length > 0 && (
+                                        <>
+                                            <li className="suggestion-category">Bairros</li>
+                                            {filteredBairros.map((bairro, index) => (
+                                                <li
+                                                    key={`${bairro.name}-${index}`}
+                                                    className="suggestion-item"
+                                                    onClick={() => {
+                                                        navigate(`/results/${bairro.estado}`);
+                                                        setSearchTerm('');
+                                                    }}
+                                                >
+                                                    🏘️ {bairro.name} <span className="suggestion-estado">({bairro.estado})</span>
+                                                </li>
+                                            ))}
+                                        </>
+                                    )}
                                 </ul>
                             );
                         })()}

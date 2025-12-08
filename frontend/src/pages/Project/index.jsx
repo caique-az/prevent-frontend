@@ -9,7 +9,6 @@ function Project() {
         { name: "Caique Camargo Azevedo", role: "Desenvolvedor Front-end" },
         { name: "Lucas Rafael Bueno de Arantes", role: "Desenvolvedor Full-Stack" },
         { name: "Viviane Aparecida Reis", role: "Desenvolvedora Full-Stack" },
-        { name: "Gabriel Furtado de Souza Carvalho", role: "Desenvolvedor Full-Stack" }
     ];
 
     return (

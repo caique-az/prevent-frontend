@@ -1,44 +1,49 @@
+/* ===== GLOBAL STYLES ===== */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+html, body {
+    overflow-x: hidden;
+    width: 100%;
+}
+
+body {
+    font-family: 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', Oxygen, Ubuntu, sans-serif;
+    line-height: 1.6;
+    color: #1a1a2e;
+    background-color: #ffffff;
+}
+
 #root {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
 }
 
-.Image {
-    width: 100%;
-    height: 30vh;
-    background-image: url("/images/pexels-photo-8568719.jpeg");
-    background-position: center;
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-weight: 700;
+    line-height: 1.2;
 }
 
-.image2 {
-    width: 80%;
-    height: 370px;
-    background-image: url("/images/equipe-de-desenvolvedores-fazendo-brainstorming-otimizando-o-codigo_482257-112972.png");
+a {
+    text-decoration: none;
+    color: inherit;
 }
 
-.shadow {
-    width: 100%;
-    height: 30vh;
-    background-color: #00000056;
+img {
+    max-width: 100%;
+    height: auto;
 }
 
-.Presentation, .Ptext {
-    width: 85%;
-    height: 20vh;
-    display: flex;
-    justify-self: center;
-    align-items: center;
-}
-
-.Welcome {
-    display: flex;
-    justify-self: center;
-    align-items: center;
-    margin-top: 5rem;
-    margin-bottom: 3rem;
-}
-
+/* ===== SEARCH INPUT (Global) ===== */
 .search {
     display: flex;
     align-items: center;
@@ -59,72 +64,29 @@
     outline: none;
 }
 
-.icons {
-    width: 100%;
-    height: 16vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+/* ===== UTILITY CLASSES ===== */
+.text-center {
+    text-align: center;
 }
 
-.icons-space1, .icons-space2, .icons-space3 {
-    width: 120px;
-    height: 120px;
-    border-radius: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: 0 auto;
+.text-primary {
+    color: #0c6681;
 }
 
-.icons-space1 {
-    background: linear-gradient(270deg, #ffd5bd, #ffe3d4);
+/* ===== SCROLLBAR CUSTOM ===== */
+::-webkit-scrollbar {
+    width: 8px;
 }
 
-.icons-space2 {
-    background: linear-gradient(270deg, #cce0f9, #d7ecff);
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
 }
 
-.icons-space3 {
-    background: linear-gradient(270deg, #f0e2b8, #f5eacb);
+::-webkit-scrollbar-thumb {
+    background: #0c6681;
+    border-radius: 4px;
 }
 
-.fire, .earth, .water {
-    font-size: 60px;
-    margin: 0;
-}
-
-.ptext-space {
-    height: 20vh;
-}
-
-.pitch {
-    background-color: #d7ecff;
-}
-
-.project {
-    background-color: #d7ecff;
-    height: 70vh;
-}
-
-.project-text {
-    width: 70%;
-    height: 370px;
-}
-
-* {
-  box-sizing: border-box;
-}
-
-html, body {
-  overflow-x: hidden;
-  width: 100%;
-}
-
-body {
-    font-family: 'Roboto', sans-serif;
-}
-
-h1, h2, h3, h4, h5, h6 {
-    font-family: 'Roboto', sans-serif;
+::-webkit-scrollbar-thumb:hover {
+    background: #054558;
 }

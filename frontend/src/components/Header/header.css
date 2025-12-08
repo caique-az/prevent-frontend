@@ -77,6 +77,10 @@
     animation: slideDown 0.2s ease-out;
 }
 
+.search-suggestions.closing {
+    animation: slideUp 0.2s ease-out forwards;
+}
+
 @keyframes slideDown {
     from {
         opacity: 0;
@@ -88,12 +92,58 @@
     }
 }
 
+@keyframes slideUp {
+    from {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    to {
+        opacity: 0;
+        transform: translateY(-8px);
+    }
+}
+
 .search-suggestions li {
     padding: 10px 16px;
     cursor: pointer;
     font-size: 0.95rem;
     color: #333;
     transition: background-color 0.15s ease, padding-left 0.15s ease;
+}
+
+.suggestion-category {
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: #7f8c8d;
+    padding: 8px 16px 4px 16px !important;
+    cursor: default !important;
+    letter-spacing: 0.5px;
+    background-color: transparent !important;
+}
+
+.suggestion-category:hover {
+    background-color: transparent !important;
+    padding-left: 16px !important;
+}
+
+.suggestion-item {
+    padding: 10px 16px;
+    cursor: pointer;
+    font-size: 0.95rem;
+    color: #333;
+    transition: background-color 0.15s ease, padding-left 0.15s ease;
+}
+
+.suggestion-item:hover {
+    background-color: #f0f7ff;
+    padding-left: 20px !important;
+}
+
+.suggestion-estado {
+    font-size: 0.85rem;
+    color: #7f8c8d;
+    font-weight: 500;
 }
 
 .search-suggestions li:hover {
