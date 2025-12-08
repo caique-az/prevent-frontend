@@ -37,8 +37,7 @@ function Footer() {
     const resources = [
         { name: 'Sobre o Projeto', path: '/projects' },
         { name: 'Configurações', path: '/configurations' },
-        { name: 'Como Funciona', path: '/#how-it-works' },
-        { name: 'Contato', path: '/#contact' },
+        { name: 'Contato', path: '/contact' },
     ];
 
     return (

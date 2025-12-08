@@ -1,0 +1,153 @@
+/* ===== NOT FOUND PAGE ===== */
+.not-found-page {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 80px 24px;
+    background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+    min-height: calc(100vh - 200px);
+}
+
+.not-found-content {
+    max-width: 600px;
+    text-align: center;
+}
+
+/* ===== 404 CODE ===== */
+.not-found-code {
+    font-size: 8rem;
+    font-weight: 900;
+    background: linear-gradient(135deg, #0c6681 0%, #054558 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1;
+    margin-bottom: 16px;
+    text-shadow: 0 4px 30px rgba(12, 102, 129, 0.2);
+}
+
+/* ===== TEXT ===== */
+.not-found-title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #1a1a2e;
+    margin-bottom: 16px;
+}
+
+.not-found-message {
+    font-size: 1.1rem;
+    color: #64748b;
+    line-height: 1.7;
+    margin-bottom: 40px;
+}
+
+/* ===== ACTIONS ===== */
+.not-found-actions {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 48px;
+}
+
+.not-found-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 16px 32px;
+    border-radius: 50px;
+    font-size: 1rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.not-found-btn-primary {
+    background: linear-gradient(135deg, #0c6681 0%, #054558 100%);
+    color: white;
+    box-shadow: 0 4px 20px rgba(12, 102, 129, 0.3);
+}
+
+.not-found-btn-primary:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 30px rgba(12, 102, 129, 0.4);
+}
+
+.not-found-btn-secondary {
+    background: white;
+    color: #0c6681;
+    border: 2px solid #0c6681;
+}
+
+.not-found-btn-secondary:hover {
+    background: #f0f9ff;
+}
+
+/* ===== SUGGESTIONS ===== */
+.not-found-suggestions {
+    padding-top: 32px;
+    border-top: 1px solid #e2e8f0;
+}
+
+.not-found-suggestions-title {
+    font-size: 0.9rem;
+    color: #94a3b8;
+    margin-bottom: 16px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.not-found-links {
+    display: flex;
+    gap: 24px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.not-found-links a {
+    color: #0c6681;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+.not-found-links a:hover {
+    color: #054558;
+    text-decoration: underline;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+    .not-found-code {
+        font-size: 6rem;
+    }
+    
+    .not-found-title {
+        font-size: 1.5rem;
+    }
+    
+    .not-found-message {
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .not-found-code {
+        font-size: 5rem;
+    }
+    
+    .not-found-actions {
+        flex-direction: column;
+    }
+    
+    .not-found-btn {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .not-found-links {
+        flex-direction: column;
+        gap: 12px;
+    }
+}

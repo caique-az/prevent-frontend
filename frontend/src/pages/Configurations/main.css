@@ -1,9 +1,551 @@
-.configurations-container {
-    min-height: calc(100vh - 200px); /* Ajuste conforme a altura do seu header e footer */
-    padding: 2rem;
+/* ===== CONFIG PAGE ===== */
+.config-page {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
 }
 
-.configurations-container h1 {
-    color: #333;
-    margin-bottom: 2rem;
+.config-container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 24px;
+}
+
+/* ===== ANIMATIONS ===== */
+.animate-on-scroll {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.animate-on-scroll.animate-in {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* ===== HERO SECTION ===== */
+.config-hero {
+    background: linear-gradient(135deg, #0c6681 0%, #054558 100%);
+    padding: 100px 24px 80px;
+    text-align: center;
+}
+
+.config-hero-content {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.config-badge {
+    display: inline-block;
+    background: rgba(255, 255, 255, 0.15);
+    color: white;
+    padding: 8px 20px;
+    border-radius: 50px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.config-hero-title {
+    font-size: 3rem;
+    font-weight: 800;
+    color: white;
+    margin-bottom: 16px;
+}
+
+.config-hero-subtitle {
+    font-size: 1.15rem;
+    color: rgba(255, 255, 255, 0.9);
+    line-height: 1.7;
+}
+
+/* ===== CONFIG CONTENT ===== */
+.config-content {
+    padding: 60px 0 80px;
+    background: #f8fafc;
+    flex: 1;
+}
+
+.config-layout {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: 32px;
+    align-items: start;
+}
+
+/* ===== SIDEBAR ===== */
+.config-sidebar {
+    background: white;
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+    position: sticky;
+    top: 100px;
+}
+
+.config-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.config-nav-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 18px;
+    border: none;
+    background: transparent;
+    border-radius: 12px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: #64748b;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: left;
+}
+
+.config-nav-item:hover {
+    background: #f0f9ff;
+    color: #0c6681;
+}
+
+.config-nav-item.active {
+    background: linear-gradient(135deg, #0c6681 0%, #054558 100%);
+    color: white;
+}
+
+.config-nav-item svg {
+    font-size: 1.1rem;
+    width: 20px;
+}
+
+/* ===== MAIN CONTENT ===== */
+.config-main {
+    background: white;
+    border-radius: 16px;
+    padding: 40px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+}
+
+.config-section-header {
+    margin-bottom: 32px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.config-section-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #1a1a2e;
+    margin-bottom: 8px;
+}
+
+.config-section-description {
+    font-size: 0.95rem;
+    color: #64748b;
+    margin: 0;
+}
+
+.config-subsection-title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #1a1a2e;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.config-subsection-title svg {
+    color: #0c6681;
+}
+
+/* ===== FORM STYLES ===== */
+.config-form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+}
+
+.config-form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.config-form-group.full-width {
+    grid-column: span 2;
+}
+
+.config-form-group label {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #1a1a2e;
+}
+
+.config-form-group input {
+    padding: 14px 16px;
+    border: 2px solid #e2e8f0;
+    border-radius: 12px;
+    font-size: 1rem;
+    color: #1a1a2e;
+    background: #f8fafc;
+    transition: all 0.3s ease;
+}
+
+.config-form-group input:focus {
+    outline: none;
+    border-color: #0c6681;
+    background: white;
+    box-shadow: 0 0 0 4px rgba(12, 102, 129, 0.1);
+}
+
+.config-form-group input::placeholder {
+    color: #94a3b8;
+}
+
+/* ===== TOGGLE SWITCHES ===== */
+.config-toggles {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-bottom: 32px;
+}
+
+.config-toggle-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    background: #f8fafc;
+    border-radius: 12px;
+    border: 2px solid transparent;
+    transition: all 0.3s ease;
+}
+
+.config-toggle-item:hover {
+    border-color: #e2e8f0;
+}
+
+.config-toggle-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.config-toggle-label {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #1a1a2e;
+}
+
+.config-toggle-description {
+    font-size: 0.85rem;
+    color: #64748b;
+}
+
+/* Custom Switch */
+.config-switch {
+    position: relative;
+    width: 52px;
+    height: 28px;
+    cursor: pointer;
+}
+
+.config-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.config-switch-slider {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: #cbd5e1;
+    border-radius: 28px;
+    transition: all 0.3s ease;
+}
+
+.config-switch-slider::before {
+    content: '';
+    position: absolute;
+    width: 22px;
+    height: 22px;
+    left: 3px;
+    bottom: 3px;
+    background: white;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.config-switch input:checked + .config-switch-slider {
+    background: linear-gradient(135deg, #0c6681 0%, #054558 100%);
+}
+
+.config-switch input:checked + .config-switch-slider::before {
+    transform: translateX(24px);
+}
+
+/* ===== ALERT CARDS ===== */
+.config-alerts-section {
+    margin-top: 32px;
+    padding-top: 32px;
+    border-top: 1px solid #e2e8f0;
+}
+
+.config-alerts-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.config-alert-card {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 20px;
+    background: #f8fafc;
+    border-radius: 12px;
+    border: 2px solid transparent;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.config-alert-card:hover {
+    border-color: #e2e8f0;
+}
+
+.config-alert-card.active {
+    border-color: #0c6681;
+    background: #f0f9ff;
+}
+
+.config-alert-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+    flex-shrink: 0;
+}
+
+.config-alert-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.config-alert-label {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #1a1a2e;
+}
+
+.config-alert-description {
+    font-size: 0.85rem;
+    color: #64748b;
+}
+
+.config-alert-check {
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #0c6681;
+    font-size: 1.25rem;
+}
+
+/* ===== THEME OPTIONS ===== */
+.config-preference-group {
+    margin-bottom: 32px;
+}
+
+.config-theme-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+}
+
+.config-theme-option {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    padding: 24px 16px;
+    background: #f8fafc;
+    border-radius: 12px;
+    border: 2px solid transparent;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.config-theme-option:hover {
+    border-color: #e2e8f0;
+}
+
+.config-theme-option.active {
+    border-color: #0c6681;
+    background: #f0f9ff;
+}
+
+.config-theme-option input {
+    display: none;
+}
+
+.config-theme-option svg {
+    font-size: 1.75rem;
+    color: #64748b;
+}
+
+.config-theme-option.active svg {
+    color: #0c6681;
+}
+
+.config-theme-option span {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #1a1a2e;
+}
+
+/* ===== REGION OPTIONS ===== */
+.config-region-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.config-region-option {
+    padding: 12px 24px;
+    background: #f8fafc;
+    border-radius: 50px;
+    border: 2px solid transparent;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.config-region-option:hover {
+    border-color: #e2e8f0;
+}
+
+.config-region-option.active {
+    border-color: #0c6681;
+    background: #f0f9ff;
+}
+
+.config-region-option input {
+    display: none;
+}
+
+.config-region-option span {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #1a1a2e;
+}
+
+.config-region-option.active span {
+    color: #0c6681;
+}
+
+/* ===== SAVE BUTTON ===== */
+.config-actions {
+    margin-top: 40px;
+    padding-top: 32px;
+    border-top: 1px solid #e2e8f0;
+}
+
+.config-save-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 16px 40px;
+    background: linear-gradient(135deg, #0c6681 0%, #054558 100%);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(12, 102, 129, 0.3);
+}
+
+.config-save-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(12, 102, 129, 0.4);
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 900px) {
+    .config-layout {
+        grid-template-columns: 1fr;
+    }
+    
+    .config-sidebar {
+        position: static;
+    }
+    
+    .config-nav {
+        flex-direction: row;
+        overflow-x: auto;
+        gap: 12px;
+    }
+    
+    .config-nav-item {
+        white-space: nowrap;
+        padding: 12px 16px;
+    }
+}
+
+@media (max-width: 600px) {
+    .config-hero {
+        padding: 80px 20px 60px;
+    }
+    
+    .config-hero-title {
+        font-size: 2rem;
+    }
+    
+    .config-main {
+        padding: 28px;
+    }
+    
+    .config-form-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .config-form-group.full-width {
+        grid-column: span 1;
+    }
+    
+    .config-theme-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .config-toggle-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 16px;
+    }
+    
+    .config-alert-card {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .config-alert-content {
+        align-items: center;
+    }
 }

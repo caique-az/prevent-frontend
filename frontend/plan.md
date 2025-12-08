@@ -17,15 +17,17 @@ Prevent/
 
 ### 🔴 Prioridade Alta (Crítico)
 
-- [ ] **Corrigir caminhos de imagens**
+- [x] **Corrigir caminhos de imagens** ✅
   - Alterar `/public/images/` para `/images/` em todos os arquivos
   - Arquivos afetados: `Results/index.jsx`, `App.css`
   - Motivo: Vite não resolve corretamente caminhos com `/public/`
 
-- [ ] **Implementar funcionalidade de busca**
+- [x] **Implementar funcionalidade de busca** ✅
   - Adicionar lógica de busca no componente `Header`
   - Permitir busca por cidade/bairro
   - Redirecionar para página de resultados com os dados filtrados
+  - Adicionado sugestões com animação de entrada/saída
+  - Busca por estados e bairros com categorização
 
 - [ ] **Corrigir inconsistência de rotas**
   - Padronizar rotas em lowercase: `/projects` e `/configurations`
@@ -44,35 +46,40 @@ Prevent/
 
 ### 🟡 Prioridade Média (Importante)
 
-- [ ] **Implementar persistência de configurações**
+- [x] **Implementar persistência de configurações** ✅
   - Salvar dados do formulário em `localStorage`
   - Carregar configurações salvas ao abrir a página
-  - Adicionar feedback visual ao salvar
+  - Feedback visual ao salvar (botão muda para "Salvo com Sucesso!")
 
-- [ ] **Adicionar loading states**
-  - Criar componente de Loading
-  - Adicionar estados de carregamento nas páginas
-  - Melhorar experiência do usuário
+- [x] **Adicionar loading states** ✅
+  - Criado componente Loading reutilizável
+  - Suporte a tamanhos (small, medium, large)
+  - Suporte a fullscreen
+  - Skeleton loading para cards
 
-- [ ] **Adicionar tratamento de erros**
-  - Implementar error boundaries
-  - Adicionar fallbacks para dados não encontrados
-  - Criar página 404 para rotas inexistentes
+- [x] **Adicionar tratamento de erros** ✅
+  - Implementado ErrorBoundary global
+  - Criada página 404 (NotFound)
+  - Criada página de Contato
+  - Validação de formulários com feedback visual
 
 - [ ] **Integrar com API real**
   - Pesquisar APIs de dados meteorológicos (INMET, CEMADEN)
   - Implementar camada de serviços para requisições
   - Substituir dados mockados por dados reais
 
-- [ ] **Completar seção pitch na Home**
-  - Adicionar conteúdo na seção vazia (linhas 98-107)
-  - Definir objetivo da seção com o time
-  - Implementar layout e conteúdo
+- [x] **Completar seção pitch na Home** ✅
+  - Seção removida e substituída por layout moderno
+  - Hero Section com CTAs e estatísticas
+  - Seção de Features (tipos de riscos)
+  - Seção "Como Funciona" com passos
+  - Seção de Estados com cards visuais
+  - Seção Sobre o Projeto
+  - Footer completo com newsletter
 
-- [ ] **Decidir sobre componente Graphic**
-  - Integrar `Graphic/index.jsx` em alguma página OU
-  - Remover componente se não for necessário
-  - Evitar código morto no projeto
+- [x] **Decidir sobre componente Graphic** ✅
+  - Componente removido (não estava sendo utilizado)
+  - Código morto eliminado do projeto
 
 ### 🟢 Prioridade Baixa (Melhorias)
 
@@ -500,6 +507,6 @@ mobile/
 
 ---
 
-**Última atualização:** 11/11/2025  
+**Última atualização:** 07/12/2025  
 **Versão do projeto:** 0.0.0  
 **Status:** Em desenvolvimento ativo
