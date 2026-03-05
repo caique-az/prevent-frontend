@@ -72,7 +72,7 @@ function Project() {
         { name: "React", category: "Frontend" },
         { name: "Vite", category: "Build" },
         { name: "Leaflet", category: "Mapas" },
-        { name: "FastAPI", category: "Backend" },
+        { name: "Spring Boot", category: "Backend" },
         { name: "PostgreSQL", category: "Database" },
         { name: "Chart.js", category: "Gráficos" },
     ];

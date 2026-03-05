@@ -11,16 +11,16 @@ O Prevent é um sistema multiplataforma de monitoramento de desastres naturais c
 │   Frontend Web (React)   │   Mobile (React Native)      │
 │   - Vite + Bootstrap     │   - Expo + TailwindCSS       │
 │   - Leaflet Maps         │   - React Native Maps        │
-│   - Chart.js             │   - Push Notifications       │
+│   - Recharts             │   - Push Notifications       │
 └──────────────────────────┴──────────────────────────────┘
                             ▼
 ┌─────────────────────────────────────────────────────────┐
 │                    CAMADA DE API                         │
-│                    FastAPI (Async)                       │
-│   - JWT Authentication (OAuth2)                          │
-│   - Swagger/OpenAPI (Automático)                         │
-│   - CORS configurado                                     │
-│   - WebSockets nativos                                   │
+│              Spring Boot 3 (Java 17)                     │
+│   - Spring Security + JWT (OAuth2 Resource Server)       │
+│   - SpringDoc OpenAPI (Swagger UI automático)            │
+│   - CORS configurado via WebMvcConfigurer                │
+│   - Spring WebSocket (STOMP) para alertas em tempo real  │
 └─────────────────────────────────────────────────────────┘
                             ▼
 ┌─────────────────────────────────────────────────────────┐
@@ -35,253 +35,480 @@ O Prevent é um sistema multiplataforma de monitoramento de desastres naturais c
 │                  CAMADA DE DADOS                         │
 │   ┌──────────────┬──────────────┬──────────────────┐   │
 │   │  PostgreSQL  │    Redis     │  APIs Externas   │   │
-│   │  (asyncpg)   │   (Cache)    │  (httpx async)   │   │
+│   │  (JDBC/JPA)  │ (Spring     │  (RestTemplate/  │   │
+│   │              │  Data Redis) │   WebClient)     │   │
 │   └──────────────┴──────────────┴──────────────────┘   │
 └─────────────────────────────────────────────────────────┘
 ```
 
 ---
 
-## ⚡ Backend FastAPI - Estrutura Detalhada
+## ☕ Backend Spring Boot - Estrutura Detalhada
 
 ### Estrutura de Diretórios
 
 ```
 backend/
-├── main.py                     # Entry point FastAPI
-├── requirements.txt
-├── .env.example
-├── .gitignore
+├── pom.xml                          # Maven - gerenciamento de dependências
 ├── Dockerfile
 ├── docker-compose.yml
 ├── README.md
-├── alembic.ini                 # Configuração Alembic
+├── .env.example
+├── .gitignore
 │
-├── alembic/                    # Migrações de banco
-│   ├── env.py
-│   ├── script.py.mako
-│   └── versions/
-│       └── (arquivos de migração)
-│
-├── app/
-│   ├── __init__.py
+├── src/
+│   ├── main/
+│   │   ├── java/com/prevent/api/
+│   │   │   ├── PreventApplication.java          # Entry point Spring Boot
+│   │   │   │
+│   │   │   ├── config/                          # Configurações
+│   │   │   │   ├── SecurityConfig.java          # Spring Security + JWT
+│   │   │   │   ├── CorsConfig.java              # CORS
+│   │   │   │   ├── WebSocketConfig.java         # WebSocket STOMP
+│   │   │   │   ├── RedisConfig.java             # Cache Redis
+│   │   │   │   ├── OpenApiConfig.java           # Swagger/OpenAPI
+│   │   │   │   └── RestTemplateConfig.java      # HTTP client para APIs externas
+│   │   │   │
+│   │   │   ├── model/                           # JPA Entities
+│   │   │   │   ├── BaseEntity.java              # Entidade base com id, timestamps
+│   │   │   │   ├── User.java                    # Usuário
+│   │   │   │   ├── UserProfile.java             # Perfil de usuário
+│   │   │   │   ├── UserPreferences.java         # Preferências
+│   │   │   │   ├── Estado.java                  # Estado
+│   │   │   │   ├── Cidade.java                  # Cidade
+│   │   │   │   ├── Bairro.java                  # Bairro
+│   │   │   │   ├── AreaDeRisco.java             # Área de risco
+│   │   │   │   ├── TipoDesastre.java            # Tipo de desastre
+│   │   │   │   ├── Desastre.java                # Desastre
+│   │   │   │   ├── HistoricoDesastre.java        # Histórico
+│   │   │   │   ├── Alerta.java                  # Alerta
+│   │   │   │   ├── AlertaUsuario.java           # Relação alerta-usuário
+│   │   │   │   └── Notification.java            # Notificação
+│   │   │   │
+│   │   │   ├── repository/                      # Spring Data JPA Repositories
+│   │   │   │   ├── UserRepository.java
+│   │   │   │   ├── EstadoRepository.java
+│   │   │   │   ├── CidadeRepository.java
+│   │   │   │   ├── BairroRepository.java
+│   │   │   │   ├── AreaDeRiscoRepository.java
+│   │   │   │   ├── DesastreRepository.java
+│   │   │   │   ├── AlertaRepository.java
+│   │   │   │   └── NotificationRepository.java
+│   │   │   │
+│   │   │   ├── dto/                             # Data Transfer Objects
+│   │   │   │   ├── request/                     # DTOs de entrada
+│   │   │   │   │   ├── UserCreateRequest.java
+│   │   │   │   │   ├── LoginRequest.java
+│   │   │   │   │   ├── EstadoCreateRequest.java
+│   │   │   │   │   └── ...
+│   │   │   │   └── response/                    # DTOs de saída
+│   │   │   │       ├── UserResponse.java
+│   │   │   │       ├── EstadoResponse.java
+│   │   │   │       ├── CidadeResponse.java
+│   │   │   │       ├── TokenResponse.java
+│   │   │   │       └── ...
+│   │   │   │
+│   │   │   ├── service/                         # Lógica de negócio
+│   │   │   │   ├── AuthService.java
+│   │   │   │   ├── UserService.java
+│   │   │   │   ├── EstadoService.java
+│   │   │   │   ├── CidadeService.java
+│   │   │   │   ├── BairroService.java
+│   │   │   │   ├── DesastreService.java
+│   │   │   │   ├── AlertaService.java
+│   │   │   │   └── NotificationService.java
+│   │   │   │
+│   │   │   ├── controller/                      # REST Controllers
+│   │   │   │   ├── AuthController.java
+│   │   │   │   ├── UserController.java
+│   │   │   │   ├── EstadoController.java
+│   │   │   │   ├── CidadeController.java
+│   │   │   │   ├── BairroController.java
+│   │   │   │   ├── DesastreController.java
+│   │   │   │   ├── AlertaController.java
+│   │   │   │   └── NotificationController.java
+│   │   │   │
+│   │   │   ├── external/                        # Integração com APIs externas
+│   │   │   │   ├── InmetClient.java             # API INMET
+│   │   │   │   ├── CemadenClient.java           # API CEMADEN
+│   │   │   │   └── InpeClient.java              # API INPE (queimadas)
+│   │   │   │
+│   │   │   ├── security/                        # Segurança
+│   │   │   │   ├── JwtTokenProvider.java         # Geração e validação de JWT
+│   │   │   │   ├── JwtAuthenticationFilter.java  # Filtro de autenticação
+│   │   │   │   └── CustomUserDetailsService.java # UserDetailsService
+│   │   │   │
+│   │   │   ├── exception/                       # Tratamento de erros
+│   │   │   │   ├── GlobalExceptionHandler.java  # @ControllerAdvice
+│   │   │   │   ├── ResourceNotFoundException.java
+│   │   │   │   ├── BadRequestException.java
+│   │   │   │   └── UnauthorizedException.java
+│   │   │   │
+│   │   │   ├── websocket/                       # WebSocket handlers
+│   │   │   │   └── AlertWebSocketHandler.java
+│   │   │   │
+│   │   │   └── util/                            # Utilitários
+│   │   │       ├── CacheUtil.java
+│   │   │       └── FirebaseUtil.java
+│   │   │
+│   │   └── resources/
+│   │       ├── application.yml                  # Configurações principais
+│   │       ├── application-dev.yml              # Perfil de desenvolvimento
+│   │       ├── application-prod.yml             # Perfil de produção
+│   │       └── db/migration/                    # Flyway migrations
+│   │           ├── V1__create_estados.sql
+│   │           ├── V2__create_cidades.sql
+│   │           ├── V3__create_bairros.sql
+│   │           └── ...
 │   │
-│   ├── core/                   # Configurações e dependências
-│   │   ├── __init__.py
-│   │   ├── config.py           # Settings (Pydantic BaseSettings)
-│   │   ├── security.py         # JWT, hashing, OAuth2
-│   │   ├── database.py         # SQLAlchemy async engine
-│   │   └── deps.py             # Dependency injection
-│   │
-│   ├── models/                 # SQLAlchemy Models
-│   │   ├── __init__.py
-│   │   ├── base.py             # Base model com timestamps
-│   │   ├── user.py             # User, UserProfile, UserPreferences
-│   │   ├── location.py         # Estado, Cidade, Bairro, AreaDeRisco
-│   │   ├── disaster.py         # TipoDesastre, Desastre, Historico
-│   │   ├── alert.py            # Alerta, NivelRisco, AlertaUsuario
-│   │   └── notification.py     # Notification, NotificationPreference
-│   │
-│   ├── schemas/                # Pydantic Schemas (validação)
-│   │   ├── __init__.py
-│   │   ├── user.py             # UserCreate, UserUpdate, UserResponse
-│   │   ├── location.py         # EstadoSchema, CidadeSchema, etc.
-│   │   ├── disaster.py         # Desastre schemas
-│   │   ├── alert.py            # Alerta schemas
-│   │   ├── notification.py     # Notification schemas
-│   │   └── token.py            # Token, TokenPayload
-│   │
-│   ├── api/                    # Rotas da API
-│   │   ├── __init__.py
-│   │   ├── deps.py             # Dependencies (get_db, get_current_user)
-│   │   └── v1/
-│   │       ├── __init__.py
-│   │       ├── api.py          # Router principal v1
-│   │       └── endpoints/
-│   │           ├── __init__.py
-│   │           ├── auth.py     # Login, register, refresh
-│   │           ├── users.py    # CRUD usuários
-│   │           ├── locations.py    # Estados, cidades, bairros
-│   │           ├── disasters.py    # Desastres e histórico
-│   │           ├── alerts.py       # Alertas
-│   │           └── notifications.py # Notificações
-│   │
-│   ├── crud/                   # CRUD operations
-│   │   ├── __init__.py
-│   │   ├── base.py             # CRUDBase genérico
-│   │   ├── user.py             # CRUD para User
-│   │   ├── location.py         # CRUD para localidades
-│   │   ├── disaster.py         # CRUD para desastres
-│   │   ├── alert.py            # CRUD para alertas
-│   │   └── notification.py     # CRUD para notificações
-│   │
-│   ├── services/               # Lógica de negócio
-│   │   ├── __init__.py
-│   │   ├── auth.py             # Autenticação e autorização
-│   │   ├── disaster.py         # Processamento de desastres
-│   │   ├── alert.py            # Geração e envio de alertas
-│   │   └── notification.py     # Envio de notificações
-│   │
-│   ├── external/               # Integração com APIs externas
-│   │   ├── __init__.py
-│   │   ├── base.py             # Cliente HTTP base (httpx)
-│   │   ├── inmet.py            # API INMET
-│   │   ├── cemaden.py          # API CEMADEN
-│   │   └── inpe.py             # API INPE (queimadas)
-│   │
-│   ├── utils/                  # Funções utilitárias
-│   │   ├── __init__.py
-│   │   ├── cache.py            # Redis cache helpers
-│   │   ├── email.py            # Envio de emails
-│   │   ├── firebase.py         # Firebase Cloud Messaging
-│   │   └── validators.py       # Validadores customizados
-│   │
-│   └── websockets/             # WebSocket handlers
-│       ├── __init__.py
-│       ├── manager.py          # Connection manager
-│       └── alerts.py           # WebSocket para alertas
-│
-└── tests/                      # Testes
-    ├── __init__.py
-    ├── conftest.py             # Fixtures pytest
-    ├── test_api/
-    │   ├── test_auth.py
-    │   ├── test_users.py
-    │   ├── test_locations.py
-    │   ├── test_disasters.py
-    │   └── test_alerts.py
-    ├── test_services/
-    └── test_external/
+│   └── test/
+│       └── java/com/prevent/api/
+│           ├── controller/
+│           │   ├── AuthControllerTest.java
+│           │   ├── EstadoControllerTest.java
+│           │   ├── CidadeControllerTest.java
+│           │   └── ...
+│           ├── service/
+│           │   ├── AuthServiceTest.java
+│           │   ├── EstadoServiceTest.java
+│           │   └── ...
+│           └── repository/
+│               ├── EstadoRepositoryTest.java
+│               └── ...
 ```
 
 ---
 
-## 📊 Modelos de Dados (SQLAlchemy Models)
+## 📊 Modelos de Dados (JPA Entities)
 
-### Módulo: `models/location.py`
+### `model/BaseEntity.java`
 
-```python
-from sqlalchemy import Column, Integer, String, Numeric, ForeignKey, JSON, Boolean
-from sqlalchemy.orm import relationship
-from app.models.base import BaseModel
+```java
+@MappedSuperclass
+@EntityListeners(AuditingEntityListener.class)
+public abstract class BaseEntity {
 
-# Estado
-class Estado(BaseModel):
-    __tablename__ = "estados"
-    
-    nome = Column(String(100), nullable=False)
-    sigla = Column(String(2), unique=True, nullable=False, index=True)
-    codigo_ibge = Column(String(2), unique=True, nullable=False)
-    regiao = Column(String(20), nullable=False)  # Norte, Sul, etc.
-    populacao = Column(Integer, nullable=True)
-    area_km2 = Column(Numeric(12, 2), nullable=True)
-    
-# Cidade
-class Cidade(models.Model):
-    nome = models.CharField(max_length=200)
-    estado = models.ForeignKey(Estado, on_delete=models.CASCADE)
-    codigo_ibge = models.CharField(max_length=7, unique=True)
-    latitude = models.DecimalField(max_digits=10, decimal_places=7)
-    longitude = models.DecimalField(max_digits=10, decimal_places=7)
-    populacao = models.IntegerField(null=True)
-    
-# Bairro
-class Bairro(models.Model):
-    nome = models.CharField(max_length=200)
-    cidade = models.ForeignKey(Cidade, on_delete=models.CASCADE)
-    latitude = models.DecimalField(max_digits=10, decimal_places=7, null=True)
-    longitude = models.DecimalField(max_digits=10, decimal_places=7, null=True)
-    
-# Área de Risco
-class AreaDeRisco(models.Model):
-    bairro = models.ForeignKey(Bairro, on_delete=models.CASCADE)
-    tipo_risco = models.CharField(max_length=50)  # enchente, deslizamento, etc.
-    nivel_risco = models.CharField(max_length=20)  # baixo, médio, alto, muito alto
-    descricao = models.TextField()
-    coordenadas_poligono = models.JSONField()  # GeoJSON
-    ativo = models.BooleanField(default=True)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @CreatedDate
+    @Column(nullable = false, updatable = false)
+    private LocalDateTime createdAt;
+
+    @LastModifiedDate
+    @Column(nullable = false)
+    private LocalDateTime updatedAt;
+}
 ```
 
-### App: `disasters`
+### `model/Estado.java`
 
-```python
-# Tipo de Desastre
-class TipoDesastre(models.Model):
-    nome = models.CharField(max_length=100)  # Enchente, Deslizamento, etc.
-    codigo = models.CharField(max_length=20, unique=True)
-    descricao = models.TextField()
-    cor_hex = models.CharField(max_length=7)  # Para UI
-    icone = models.CharField(max_length=50)  # Nome do ícone
-    
-# Desastre
-class Desastre(models.Model):
-    tipo = models.ForeignKey(TipoDesastre, on_delete=models.PROTECT)
-    cidade = models.ForeignKey(Cidade, on_delete=models.CASCADE)
-    bairro = models.ForeignKey(Bairro, on_delete=models.CASCADE, null=True)
-    titulo = models.CharField(max_length=200)
-    descricao = models.TextField()
-    data_ocorrencia = models.DateTimeField()
-    data_fim = models.DateTimeField(null=True)
-    gravidade = models.CharField(max_length=20)  # baixa, média, alta, crítica
-    vitimas = models.IntegerField(default=0)
-    desabrigados = models.IntegerField(default=0)
-    status = models.CharField(max_length=20)  # ativo, controlado, finalizado
-    fonte = models.CharField(max_length=100)  # defesa_civil, api_externa, etc.
-    
-# Histórico de Desastres
-class HistoricoDesastre(models.Model):
-    desastre = models.ForeignKey(Desastre, on_delete=models.CASCADE)
-    data_atualizacao = models.DateTimeField(auto_now_add=True)
-    status_anterior = models.CharField(max_length=20)
-    status_novo = models.CharField(max_length=20)
-    observacoes = models.TextField()
+```java
+@Entity
+@Table(name = "estados")
+public class Estado extends BaseEntity {
+
+    @Column(length = 100, nullable = false)
+    private String nome;
+
+    @Column(length = 2, unique = true, nullable = false)
+    private String sigla;
+
+    @Column(length = 2, unique = true, nullable = false)
+    private String codigoIbge;
+
+    @Column(length = 20, nullable = false)
+    private String regiao;
+
+    private Integer populacao;
+
+    @Column(precision = 12, scale = 2)
+    private BigDecimal areaKm2;
+
+    @OneToMany(mappedBy = "estado", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Cidade> cidades = new ArrayList<>();
+}
 ```
 
-### App: `alerts`
+### `model/Cidade.java`
 
-```python
-# Alerta
-class Alerta(models.Model):
-    tipo_desastre = models.ForeignKey(TipoDesastre, on_delete=models.PROTECT)
-    cidade = models.ForeignKey(Cidade, on_delete=models.CASCADE)
-    bairro = models.ForeignKey(Bairro, on_delete=models.CASCADE, null=True)
-    titulo = models.CharField(max_length=200)
-    mensagem = models.TextField()
-    nivel_urgencia = models.CharField(max_length=20)  # baixo, médio, alto, crítico
-    data_inicio = models.DateTimeField()
-    data_fim = models.DateTimeField(null=True)
-    ativo = models.BooleanField(default=True)
-    fonte = models.CharField(max_length=100)
-    
-# Alerta de Usuário (relação many-to-many)
-class AlertaUsuario(models.Model):
-    alerta = models.ForeignKey(Alerta, on_delete=models.CASCADE)
-    usuario = models.ForeignKey(User, on_delete=models.CASCADE)
-    visualizado = models.BooleanField(default=False)
-    data_visualizacao = models.DateTimeField(null=True)
-    notificado = models.BooleanField(default=False)
+```java
+@Entity
+@Table(name = "cidades")
+public class Cidade extends BaseEntity {
+
+    @Column(length = 200, nullable = false)
+    private String nome;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "estado_id", nullable = false)
+    private Estado estado;
+
+    @Column(length = 7, unique = true, nullable = false)
+    private String codigoIbge;
+
+    @Column(precision = 10, scale = 7, nullable = false)
+    private BigDecimal latitude;
+
+    @Column(precision = 10, scale = 7, nullable = false)
+    private BigDecimal longitude;
+
+    private Integer populacao;
+
+    @OneToMany(mappedBy = "cidade", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Bairro> bairros = new ArrayList<>();
+}
 ```
 
-### App: `users`
+### `model/Bairro.java`
 
-```python
-# Perfil de Usuário
-class UserProfile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    telefone = models.CharField(max_length=20, null=True)
-    cidade = models.ForeignKey(Cidade, on_delete=models.SET_NULL, null=True)
-    bairro = models.ForeignKey(Bairro, on_delete=models.SET_NULL, null=True)
-    foto_perfil = models.ImageField(upload_to='perfis/', null=True)
-    
-# Preferências de Usuário
-class UserPreferences(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    notificacoes_push = models.BooleanField(default=True)
-    notificacoes_email = models.BooleanField(default=True)
-    notificacoes_sms = models.BooleanField(default=False)
-    tipos_desastre_interesse = models.ManyToManyField(TipoDesastre)
-    raio_alerta_km = models.IntegerField(default=50)  # Raio de interesse
-    tema = models.CharField(max_length=20, default='claro')  # claro, escuro, sistema
+```java
+@Entity
+@Table(name = "bairros")
+public class Bairro extends BaseEntity {
+
+    @Column(length = 200, nullable = false)
+    private String nome;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "cidade_id", nullable = false)
+    private Cidade cidade;
+
+    @Column(precision = 10, scale = 7)
+    private BigDecimal latitude;
+
+    @Column(precision = 10, scale = 7)
+    private BigDecimal longitude;
+
+    @OneToMany(mappedBy = "bairro", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<AreaDeRisco> areasDeRisco = new ArrayList<>();
+}
+```
+
+### `model/AreaDeRisco.java`
+
+```java
+@Entity
+@Table(name = "areas_risco")
+public class AreaDeRisco extends BaseEntity {
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "bairro_id", nullable = false)
+    private Bairro bairro;
+
+    @Column(length = 50, nullable = false)
+    private String tipoRisco; // enchente, deslizamento, etc.
+
+    @Column(length = 20, nullable = false)
+    private String nivelRisco; // baixo, médio, alto, muito alto
+
+    @Column(columnDefinition = "TEXT")
+    private String descricao;
+
+    @Column(columnDefinition = "jsonb")
+    private String coordenadasPoligono; // GeoJSON
+
+    @Column(nullable = false)
+    private Boolean ativo = true;
+}
+```
+
+### `model/TipoDesastre.java`
+
+```java
+@Entity
+@Table(name = "tipos_desastre")
+public class TipoDesastre extends BaseEntity {
+
+    @Column(length = 100, nullable = false)
+    private String nome; // Enchente, Deslizamento, etc.
+
+    @Column(length = 20, unique = true, nullable = false)
+    private String codigo;
+
+    @Column(columnDefinition = "TEXT")
+    private String descricao;
+
+    @Column(length = 7)
+    private String corHex; // Para UI
+
+    @Column(length = 50)
+    private String icone; // Nome do ícone
+}
+```
+
+### `model/Desastre.java`
+
+```java
+@Entity
+@Table(name = "desastres")
+public class Desastre extends BaseEntity {
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "tipo_id", nullable = false)
+    private TipoDesastre tipo;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "cidade_id", nullable = false)
+    private Cidade cidade;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "bairro_id")
+    private Bairro bairro;
+
+    @Column(length = 200, nullable = false)
+    private String titulo;
+
+    @Column(columnDefinition = "TEXT")
+    private String descricao;
+
+    @Column(nullable = false)
+    private LocalDateTime dataOcorrencia;
+
+    private LocalDateTime dataFim;
+
+    @Column(length = 20, nullable = false)
+    private String gravidade; // baixa, média, alta, crítica
+
+    @Column(nullable = false)
+    private Integer vitimas = 0;
+
+    @Column(nullable = false)
+    private Integer desabrigados = 0;
+
+    @Column(length = 20, nullable = false)
+    private String status; // ativo, controlado, finalizado
+
+    @Column(length = 100)
+    private String fonte; // defesa_civil, api_externa, etc.
+}
+```
+
+### `model/Alerta.java`
+
+```java
+@Entity
+@Table(name = "alertas")
+public class Alerta extends BaseEntity {
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "tipo_desastre_id", nullable = false)
+    private TipoDesastre tipoDesastre;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "cidade_id", nullable = false)
+    private Cidade cidade;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "bairro_id")
+    private Bairro bairro;
+
+    @Column(length = 200, nullable = false)
+    private String titulo;
+
+    @Column(columnDefinition = "TEXT", nullable = false)
+    private String mensagem;
+
+    @Column(length = 20, nullable = false)
+    private String nivelUrgencia; // baixo, médio, alto, crítico
+
+    @Column(nullable = false)
+    private LocalDateTime dataInicio;
+
+    private LocalDateTime dataFim;
+
+    @Column(nullable = false)
+    private Boolean ativo = true;
+
+    @Column(length = 100)
+    private String fonte;
+}
+```
+
+### `model/User.java` e relacionados
+
+```java
+@Entity
+@Table(name = "users")
+public class User extends BaseEntity {
+
+    @Column(length = 150, unique = true, nullable = false)
+    private String email;
+
+    @Column(nullable = false)
+    private String password;
+
+    @Column(length = 100, nullable = false)
+    private String nome;
+
+    @Column(nullable = false)
+    private Boolean ativo = true;
+
+    @Enumerated(EnumType.STRING)
+    @Column(length = 20, nullable = false)
+    private Role role = Role.USER; // USER, ADMIN
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private UserProfile profile;
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private UserPreferences preferences;
+}
+
+@Entity
+@Table(name = "user_profiles")
+public class UserProfile extends BaseEntity {
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false, unique = true)
+    private User user;
+
+    @Column(length = 20)
+    private String telefone;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "cidade_id")
+    private Cidade cidade;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "bairro_id")
+    private Bairro bairro;
+
+    private String fotoPerfil;
+}
+
+@Entity
+@Table(name = "user_preferences")
+public class UserPreferences extends BaseEntity {
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false, unique = true)
+    private User user;
+
+    @Column(nullable = false)
+    private Boolean notificacoesPush = true;
+
+    @Column(nullable = false)
+    private Boolean notificacoesEmail = true;
+
+    @Column(nullable = false)
+    private Boolean notificacoesSms = false;
+
+    @ManyToMany
+    @JoinTable(
+        name = "user_tipos_desastre",
+        joinColumns = @JoinColumn(name = "preferences_id"),
+        inverseJoinColumns = @JoinColumn(name = "tipo_desastre_id")
+    )
+    private Set<TipoDesastre> tiposDesastreInteresse = new HashSet<>();
+
+    @Column(nullable = false)
+    private Integer raioAlertaKm = 50;
+
+    @Column(length = 20, nullable = false)
+    private String tema = "claro"; // claro, escuro, sistema
+}
 ```
 
 ---
@@ -290,77 +517,79 @@ class UserPreferences(models.Model):
 
 ### Base URL: `/api/v1/`
 
-#### **Autenticação** (`/auth/`)
+#### **Autenticação** (`/api/v1/auth`)
 ```
-POST   /auth/register/          # Registro de novo usuário
-POST   /auth/login/             # Login (retorna JWT)
-POST   /auth/refresh/           # Refresh token
-POST   /auth/logout/            # Logout
-GET    /auth/me/                # Dados do usuário logado
-PUT    /auth/me/                # Atualizar perfil
-```
-
-#### **Localidades** (`/locations/`)
-```
-GET    /estados/                # Lista todos os estados
-GET    /estados/{id}/           # Detalhes de um estado
-GET    /estados/{id}/cidades/   # Cidades de um estado
-
-GET    /cidades/                # Lista cidades (com filtros)
-GET    /cidades/{id}/           # Detalhes de uma cidade
-GET    /cidades/{id}/bairros/   # Bairros de uma cidade
-GET    /cidades/buscar/?q=      # Busca por nome
-
-GET    /bairros/                # Lista bairros
-GET    /bairros/{id}/           # Detalhes de um bairro
-GET    /bairros/{id}/areas-risco/ # Áreas de risco do bairro
+POST   /auth/register          # Registro de novo usuário
+POST   /auth/login             # Login (retorna JWT)
+POST   /auth/refresh           # Refresh token
+POST   /auth/logout            # Logout
+GET    /auth/me                # Dados do usuário logado
+PUT    /auth/me                # Atualizar perfil
 ```
 
-#### **Desastres** (`/disasters/`)
+#### **Localidades** (`/api/v1/`)
 ```
-GET    /tipos/                  # Tipos de desastre
-GET    /desastres/              # Lista desastres (filtros: cidade, tipo, data)
-GET    /desastres/{id}/         # Detalhes de um desastre
-GET    /desastres/ativos/       # Desastres ativos
-GET    /historico/              # Histórico de desastres
-GET    /estatisticas/           # Estatísticas gerais
+GET    /estados                # Lista todos os estados
+GET    /estados/{id}           # Detalhes de um estado
+GET    /estados/{id}/cidades   # Cidades de um estado
+
+GET    /cidades                # Lista cidades (com filtros)
+GET    /cidades/{id}           # Detalhes de uma cidade
+GET    /cidades/{id}/bairros   # Bairros de uma cidade
+GET    /cidades/buscar?q=      # Busca por nome
+
+GET    /bairros                # Lista bairros
+GET    /bairros/{id}           # Detalhes de um bairro
+GET    /bairros/{id}/areas-risco # Áreas de risco do bairro
 ```
 
-#### **Alertas** (`/alerts/`)
+#### **Desastres** (`/api/v1/`)
 ```
-GET    /alertas/                # Lista alertas (filtros: cidade, ativo)
-GET    /alertas/{id}/           # Detalhes de um alerta
-GET    /alertas/ativos/         # Alertas ativos
-GET    /alertas/meus/           # Alertas do usuário logado
-POST   /alertas/{id}/visualizar/ # Marcar como visualizado
+GET    /tipos-desastre         # Tipos de desastre
+GET    /desastres              # Lista desastres (filtros: cidade, tipo, data)
+GET    /desastres/{id}         # Detalhes de um desastre
+GET    /desastres/ativos       # Desastres ativos
+GET    /historico              # Histórico de desastres
+GET    /estatisticas           # Estatísticas gerais
 ```
 
-#### **Notificações** (`/notifications/`)
+#### **Alertas** (`/api/v1/`)
 ```
-GET    /notificacoes/           # Lista notificações do usuário
-GET    /notificacoes/{id}/      # Detalhes de uma notificação
-POST   /notificacoes/{id}/ler/  # Marcar como lida
-GET    /preferencias/           # Preferências de notificação
-PUT    /preferencias/           # Atualizar preferências
-POST   /dispositivos/           # Registrar dispositivo (FCM token)
+GET    /alertas                # Lista alertas (filtros: cidade, ativo)
+GET    /alertas/{id}           # Detalhes de um alerta
+GET    /alertas/ativos         # Alertas ativos
+GET    /alertas/meus           # Alertas do usuário logado (autenticado)
+POST   /alertas/{id}/visualizar # Marcar como visualizado (autenticado)
+```
+
+#### **Notificações** (`/api/v1/`)
+```
+GET    /notificacoes           # Lista notificações do usuário
+GET    /notificacoes/{id}      # Detalhes de uma notificação
+POST   /notificacoes/{id}/ler  # Marcar como lida
+GET    /preferencias           # Preferências de notificação
+PUT    /preferencias           # Atualizar preferências
+POST   /dispositivos           # Registrar dispositivo (FCM token)
 ```
 
 ---
 
 ## 🔐 Autenticação e Segurança
 
-### JWT (JSON Web Tokens)
+### JWT (JSON Web Tokens) via Spring Security
 - **Access Token:** Válido por 1 hora
 - **Refresh Token:** Válido por 7 dias
-- Armazenamento seguro no cliente (HttpOnly cookies ou AsyncStorage)
+- Implementado com `jjwt` (io.jsonwebtoken)
+- Filtro customizado `JwtAuthenticationFilter` no Spring Security filter chain
+- Armazenamento seguro no cliente (HttpOnly cookies ou AsyncStorage no mobile)
 
-### Permissões
-- **Público:** Acesso a dados de localidades e desastres
-- **Autenticado:** Acesso a alertas personalizados e notificações
-- **Admin:** Acesso ao Django Admin e criação de alertas
+### Permissões (Roles)
+- **Público (`permitAll`):** Acesso a dados de localidades e desastres
+- **Autenticado (`ROLE_USER`):** Acesso a alertas personalizados e notificações
+- **Admin (`ROLE_ADMIN`):** CRUD completo, criação de alertas, gerenciamento de dados
 
 ### CORS
-- Configurado para aceitar requisições do frontend web e mobile
+- Configurado via `WebMvcConfigurer` para aceitar requisições do frontend web e mobile
 - Headers permitidos: Authorization, Content-Type
 
 ---
@@ -370,66 +599,59 @@ POST   /dispositivos/           # Registrar dispositivo (FCM token)
 ### INMET (Instituto Nacional de Meteorologia)
 - **Endpoint:** `https://apitempo.inmet.gov.br/`
 - **Dados:** Previsão do tempo, precipitação, temperatura
-- **Frequência:** Atualização a cada 1 hora (Celery task)
+- **Frequência:** Atualização a cada 1 hora (`@Scheduled`)
 
 ### CEMADEN (Centro Nacional de Monitoramento e Alertas)
 - **Endpoint:** `http://www.cemaden.gov.br/`
 - **Dados:** Alertas de desastres, pluviometria
-- **Frequência:** Atualização a cada 30 minutos
+- **Frequência:** Atualização a cada 30 minutos (`@Scheduled`)
 
 ### INPE (Instituto Nacional de Pesquisas Espaciais)
 - **Endpoint:** `https://queimadas.dgi.inpe.br/`
 - **Dados:** Focos de incêndio
-- **Frequência:** Atualização a cada 3 horas
+- **Frequência:** Atualização a cada 3 horas (`@Scheduled`)
 
 ### Cache Strategy
-- Redis para cache de respostas de APIs externas
+- Spring Data Redis para cache de respostas de APIs externas (`@Cacheable`)
 - TTL: 1 hora para dados meteorológicos, 30 minutos para alertas
 
 ---
 
-## 📦 Dependências Principais (requirements.txt)
+## 📦 Dependências Principais (pom.xml)
 
-```txt
-# Core
-Django==5.0.0
-djangorestframework==3.14.0
-djangorestframework-simplejwt==5.3.0
+```xml
+<!-- Spring Boot Starters -->
+<dependency>spring-boot-starter-web</dependency>
+<dependency>spring-boot-starter-data-jpa</dependency>
+<dependency>spring-boot-starter-security</dependency>
+<dependency>spring-boot-starter-validation</dependency>
+<dependency>spring-boot-starter-websocket</dependency>
+<dependency>spring-boot-starter-data-redis</dependency>
+<dependency>spring-boot-starter-mail</dependency>
 
-# Database
-psycopg2-binary==2.9.9
-dj-database-url==2.1.0
+<!-- Database -->
+<dependency>postgresql</dependency>
+<dependency>flyway-core</dependency>
 
-# Cache & Tasks
-redis==5.0.1
-celery==5.3.4
-django-redis==5.4.0
+<!-- JWT -->
+<dependency>io.jsonwebtoken:jjwt-api</dependency>
+<dependency>io.jsonwebtoken:jjwt-impl</dependency>
+<dependency>io.jsonwebtoken:jjwt-jackson</dependency>
 
-# API Documentation
-drf-spectacular==0.27.0
+<!-- Documentação API -->
+<dependency>org.springdoc:springdoc-openapi-starter-webmvc-ui</dependency>
 
-# CORS
-django-cors-headers==4.3.1
+<!-- Firebase (notificações push) -->
+<dependency>com.google.firebase:firebase-admin</dependency>
 
-# Environment
-python-decouple==3.8
+<!-- Utilitários -->
+<dependency>org.projectlombok:lombok</dependency>
+<dependency>org.mapstruct:mapstruct</dependency>
 
-# External APIs
-requests==2.31.0
-httpx==0.25.2
-
-# Notifications
-firebase-admin==6.3.0
-
-# Testing
-pytest==7.4.3
-pytest-django==4.7.0
-pytest-cov==4.1.0
-factory-boy==3.3.0
-
-# Utils
-python-dateutil==2.8.2
-Pillow==10.1.0
+<!-- Testes -->
+<dependency>spring-boot-starter-test</dependency>
+<dependency>spring-security-test</dependency>
+<dependency>com.h2database:h2</dependency> <!-- BD em memória para testes -->
 ```
 
 ---
@@ -437,6 +659,7 @@ Pillow==10.1.0
 ## 🐳 Docker Setup
 
 ### docker-compose.yml
+
 ```yaml
 version: '3.8'
 
@@ -459,30 +682,37 @@ services:
 
   backend:
     build: .
-    command: python manage.py runserver 0.0.0.0:8000
-    volumes:
-      - .:/app
     ports:
-      - "8000:8000"
+      - "8080:8080"
     depends_on:
       - db
       - redis
-    env_file:
-      - .env
-
-  celery:
-    build: .
-    command: celery -A prevent worker -l info
-    volumes:
-      - .:/app
-    depends_on:
-      - db
-      - redis
-    env_file:
-      - .env
+    environment:
+      SPRING_PROFILES_ACTIVE: dev
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/prevent_db
+      SPRING_DATASOURCE_USERNAME: prevent_user
+      SPRING_DATASOURCE_PASSWORD: prevent_pass
+      SPRING_DATA_REDIS_HOST: redis
+      SPRING_DATA_REDIS_PORT: 6379
 
 volumes:
   postgres_data:
+```
+
+### Dockerfile
+
+```dockerfile
+FROM eclipse-temurin:17-jdk-alpine AS build
+WORKDIR /app
+COPY pom.xml .
+COPY src ./src
+RUN ./mvnw clean package -DskipTests
+
+FROM eclipse-temurin:17-jre-alpine
+WORKDIR /app
+COPY --from=build /app/target/*.jar app.jar
+EXPOSE 8080
+ENTRYPOINT ["java", "-jar", "app.jar"]
 ```
 
 ---
@@ -490,60 +720,72 @@ volumes:
 ## 🧪 Testes
 
 ### Estrutura de Testes
-- **Unitários:** Testes de models, serializers, utils
-- **Integração:** Testes de endpoints da API
-- **Cobertura mínima:** 80%
+- **Unitários:** Testes de services com Mockito
+- **Integração:** Testes de controllers com `@SpringBootTest` + `MockMvc`
+- **Repositório:** Testes de queries com `@DataJpaTest` + H2
+- **Cobertura mínima:** 80% (JaCoCo)
 
 ### Comandos
 ```bash
 # Rodar todos os testes
-pytest
+mvn test
 
-# Com cobertura
-pytest --cov=apps --cov-report=html
+# Com relatório de cobertura
+mvn test jacoco:report
 
 # Testes específicos
-pytest apps/users/tests/
+mvn test -Dtest=EstadoControllerTest
+
+# Build completo (inclui testes)
+mvn clean verify
 ```
 
 ---
 
 ## 📈 Monitoramento e Logs
 
+### Spring Boot Actuator
+- `/actuator/health` — Health check
+- `/actuator/metrics` — Métricas da aplicação
+- `/actuator/info` — Informações do build
+
 ### Sentry
 - Error tracking em produção
 - Alertas para erros críticos
 
-### Logs
-- Logs estruturados (JSON)
-- Níveis: DEBUG, INFO, WARNING, ERROR, CRITICAL
+### Logs (SLF4J + Logback)
+- Logs estruturados (JSON em produção)
+- Níveis: TRACE, DEBUG, INFO, WARN, ERROR
 - Rotação de logs diária
+- Configuração via `logback-spring.xml`
 
 ### Métricas
 - Tempo de resposta de endpoints
 - Taxa de erro
-- Uso de cache
+- Uso de cache (hits/misses)
 - Requisições por minuto
+- Micrometer + Prometheus (opcional)
 
 ---
 
 ## 🚀 Deploy
 
 ### Checklist de Deploy
-- [ ] Configurar variáveis de ambiente
-- [ ] Migrar banco de dados
-- [ ] Coletar arquivos estáticos
+- [ ] Configurar variáveis de ambiente (`application-prod.yml`)
+- [ ] Executar migrações Flyway (automático no startup)
 - [ ] Configurar SSL/HTTPS
 - [ ] Configurar domínio
-- [ ] Setup de Celery workers
-- [ ] Configurar backups automáticos
-- [ ] Configurar monitoramento
+- [ ] Configurar Redis em produção
+- [ ] Configurar backups automáticos do PostgreSQL
+- [ ] Configurar monitoramento (Actuator + Sentry)
+- [ ] Build da imagem Docker
 
 ### Plataformas Recomendadas
-- **Railway:** Fácil setup, $10-30/mês
-- **Render:** Tier gratuito disponível
-- **AWS/GCP:** Mais controle, requer mais configuração
+- **Railway:** Fácil setup para Docker, $10-30/mês
+- **Render:** Suporte a Docker, tier gratuito limitado
+- **AWS (ECS/EC2):** Mais controle, requer mais configuração
+- **Google Cloud Run:** Bom para containers, pay-per-use
 
 ---
 
-**Última atualização:** 11/11/2025
+**Última atualização:** Março 2026
