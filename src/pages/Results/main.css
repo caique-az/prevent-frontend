@@ -199,3 +199,105 @@
     font-size: 0.95rem;
     line-height: 1.6;
 }
+
+/* Tragedy Chart Section - Inline with flag */
+.tragedy-chart-section {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    padding: 1rem;
+}
+
+.tragedy-chart-section h4 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #2c3e50;
+    margin-bottom: 1rem;
+}
+
+.chart-container-inline {
+    max-width: 280px;
+    max-height: 280px;
+    width: 100%;
+    height: auto;
+    margin: 0 auto;
+}
+
+.city-info-wrapper {
+    padding: 1rem 0;
+}
+
+.flag-and-text-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.city-text-below {
+    padding: 0 1rem;
+}
+
+.city-text-below .city-presentation {
+    font-size: 1.05rem;
+    line-height: 1.8;
+    color: #333;
+    text-align: justify;
+}
+
+/* Neighborhood cards - clickable */
+.neighborhood-card {
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.neighborhood-card:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2) !important;
+    border: 2px solid #0c6681;
+}
+
+.neighborhood-card:active {
+    transform: translateY(-4px) scale(1.01);
+}
+
+.neighborhood-card::after {
+    content: '📍 Ver no mapa';
+    position: absolute;
+    bottom: 10px;
+    right: 15px;
+    font-size: 0.75rem;
+    color: #0c6681;
+    font-weight: 600;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.neighborhood-card:hover::after {
+    opacity: 1;
+}
+
+/* Responsive adjustments */
+@media (max-width: 991px) {
+    .tragedy-chart-section {
+        margin-top: 2rem;
+        padding-top: 2rem;
+        border-top: 1px solid #e0e0e0;
+    }
+    
+    .chart-container-inline {
+        max-width: 300px;
+        max-height: 300px;
+    }
+    
+    .city-text-below {
+        padding: 0;
+    }
+    
+    .neighborhood-card::after {
+        font-size: 0.7rem;
+        bottom: 8px;
+        right: 10px;
+    }
+}

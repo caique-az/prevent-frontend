@@ -17,15 +17,17 @@ Prevent/
 
 ### 🔴 Prioridade Alta (Crítico)
 
-- [ ] **Corrigir caminhos de imagens**
+- [x] **Corrigir caminhos de imagens** ✅
   - Alterar `/public/images/` para `/images/` em todos os arquivos
   - Arquivos afetados: `Results/index.jsx`, `App.css`
   - Motivo: Vite não resolve corretamente caminhos com `/public/`
 
-- [ ] **Implementar funcionalidade de busca**
+- [x] **Implementar funcionalidade de busca** ✅
   - Adicionar lógica de busca no componente `Header`
   - Permitir busca por cidade/bairro
   - Redirecionar para página de resultados com os dados filtrados
+  - Adicionado sugestões com animação de entrada/saída
+  - Busca por estados e bairros com categorização
 
 - [ ] **Corrigir inconsistência de rotas**
   - Padronizar rotas em lowercase: `/projects` e `/configurations`
@@ -44,35 +46,40 @@ Prevent/
 
 ### 🟡 Prioridade Média (Importante)
 
-- [ ] **Implementar persistência de configurações**
+- [x] **Implementar persistência de configurações** ✅
   - Salvar dados do formulário em `localStorage`
   - Carregar configurações salvas ao abrir a página
-  - Adicionar feedback visual ao salvar
+  - Feedback visual ao salvar (botão muda para "Salvo com Sucesso!")
 
-- [ ] **Adicionar loading states**
-  - Criar componente de Loading
-  - Adicionar estados de carregamento nas páginas
-  - Melhorar experiência do usuário
+- [x] **Adicionar loading states** ✅
+  - Criado componente Loading reutilizável
+  - Suporte a tamanhos (small, medium, large)
+  - Suporte a fullscreen
+  - Skeleton loading para cards
 
-- [ ] **Adicionar tratamento de erros**
-  - Implementar error boundaries
-  - Adicionar fallbacks para dados não encontrados
-  - Criar página 404 para rotas inexistentes
+- [x] **Adicionar tratamento de erros** ✅
+  - Implementado ErrorBoundary global
+  - Criada página 404 (NotFound)
+  - Criada página de Contato
+  - Validação de formulários com feedback visual
 
 - [ ] **Integrar com API real**
   - Pesquisar APIs de dados meteorológicos (INMET, CEMADEN)
   - Implementar camada de serviços para requisições
   - Substituir dados mockados por dados reais
 
-- [ ] **Completar seção pitch na Home**
-  - Adicionar conteúdo na seção vazia (linhas 98-107)
-  - Definir objetivo da seção com o time
-  - Implementar layout e conteúdo
+- [x] **Completar seção pitch na Home** ✅
+  - Seção removida e substituída por layout moderno
+  - Hero Section com CTAs e estatísticas
+  - Seção de Features (tipos de riscos)
+  - Seção "Como Funciona" com passos
+  - Seção de Estados com cards visuais
+  - Seção Sobre o Projeto
+  - Footer completo com newsletter
 
-- [ ] **Decidir sobre componente Graphic**
-  - Integrar `Graphic/index.jsx` em alguma página OU
-  - Remover componente se não for necessário
-  - Evitar código morto no projeto
+- [x] **Decidir sobre componente Graphic** ✅
+  - Componente removido (não estava sendo utilizado)
+  - Código morto eliminado do projeto
 
 ### 🟢 Prioridade Baixa (Melhorias)
 
@@ -126,134 +133,117 @@ Prevent/
 
 ---
 
-## ⚡ FASE 2: Backend FastAPI (Sprint 3-6 semanas)
+## ☕ FASE 2: Backend Spring Boot (Sprint 3-6 semanas)
+
+> **Nota:** O backend será desenvolvido em repositório separado. A documentação permanece aqui até a migração.
 
 ### Estrutura do Backend
 
 ```
 backend/
-├── main.py              # Entry point FastAPI
-├── requirements.txt
+├── pom.xml                          # Maven
+├── Dockerfile
+├── docker-compose.yml
 ├── .env.example
-├── alembic/             # Migrações de banco
-│   └── versions/
-├── app/
-│   ├── __init__.py
-│   ├── core/            # Configurações, segurança, deps
-│   │   ├── config.py
-│   │   ├── security.py
-│   │   └── database.py
-│   ├── models/          # SQLAlchemy models
-│   │   ├── user.py
-│   │   ├── location.py
-│   │   ├── disaster.py
-│   │   ├── alert.py
-│   │   └── notification.py
-│   ├── schemas/         # Pydantic schemas
-│   │   ├── user.py
-│   │   ├── location.py
-│   │   ├── disaster.py
-│   │   └── alert.py
-│   ├── api/             # Rotas da API
-│   │   ├── v1/
-│   │   │   ├── endpoints/
-│   │   │   │   ├── auth.py
-│   │   │   │   ├── users.py
-│   │   │   │   ├── locations.py
-│   │   │   │   ├── disasters.py
-│   │   │   │   ├── alerts.py
-│   │   │   │   └── notifications.py
-│   │   │   └── api.py
-│   │   └── deps.py      # Dependências
-│   ├── services/        # Lógica de negócio
-│   │   ├── auth.py
-│   │   ├── disaster.py
-│   │   ├── alert.py
-│   │   └── notification.py
-│   ├── external/        # APIs externas
-│   │   ├── inmet.py
-│   │   ├── cemaden.py
-│   │   └── inpe.py
-│   └── utils/           # Funções utilitárias
-└── tests/               # Testes automatizados
+├── src/
+│   ├── main/
+│   │   ├── java/com/prevent/api/
+│   │   │   ├── PreventApplication.java
+│   │   │   ├── config/              # Configurações (Security, CORS, Redis, OpenAPI)
+│   │   │   ├── model/               # JPA Entities
+│   │   │   ├── repository/          # Spring Data JPA Repositories
+│   │   │   ├── dto/                 # DTOs (request/ e response/)
+│   │   │   ├── service/             # Lógica de negócio
+│   │   │   ├── controller/          # REST Controllers
+│   │   │   ├── security/            # JWT (Provider, Filter, UserDetailsService)
+│   │   │   ├── exception/           # @ControllerAdvice, exceções customizadas
+│   │   │   ├── external/            # Clientes de APIs externas (INMET, CEMADEN, INPE)
+│   │   │   ├── websocket/           # WebSocket handlers (STOMP)
+│   │   │   └── util/                # Utilitários
+│   │   └── resources/
+│   │       ├── application.yml
+│   │       ├── application-dev.yml
+│   │       ├── application-prod.yml
+│   │       └── db/migration/        # Flyway migrations
+│   └── test/
+│       └── java/com/prevent/api/    # Testes (controller/, service/, repository/)
 ```
 
 ### 🔴 Backend - Prioridade Alta
 
-- [ ] **Setup inicial do projeto FastAPI**
-  - Criar estrutura de pastas `/backend`
-  - Configurar FastAPI com SQLAlchemy (async)
-  - Configurar PostgreSQL com asyncpg
-  - Setup de variáveis de ambiente (pydantic-settings)
-  - Configurar CORS para comunicação com frontend
-  - Configurar Alembic para migrações
+- [ ] **Setup inicial do projeto Spring Boot**
+  - Criar projeto via Spring Initializr (Java 17, Maven, Spring Boot 3.2+)
+  - Configurar `docker-compose.yml` (PostgreSQL + Redis)
+  - Configurar `application.yml` (datasource, JPA, Flyway)
+  - Configurar CORS via `WebMvcConfigurer`
+  - Configurar Flyway para migrações de banco
 
 - [ ] **Módulo `locations` - Localidades**
-  - Models (SQLAlchemy): Estado, Cidade, Bairro, AreaDeRisco
-  - Schemas (Pydantic): validação de entrada/saída
-  - Routers com filtros e paginação
-  - Endpoints: `/api/v1/estados/`, `/api/v1/cidades/`, `/api/v1/bairros/`
-  - Popular banco com dados dos 27 estados brasileiros
+  - JPA Entities: Estado, Cidade, Bairro, AreaDeRisco
+  - DTOs de request/response com Bean Validation (`@Valid`)
+  - Repositories com queries customizadas (`@Query`)
+  - Services e Controllers REST
+  - Endpoints: `/api/v1/estados`, `/api/v1/cidades`, `/api/v1/bairros`
+  - Popular banco com dados dos 27 estados (Flyway `data.sql` ou `CommandLineRunner`)
 
 - [ ] **Módulo `disasters` - Desastres**
-  - Models (SQLAlchemy): TipoDesastre, Desastre, HistoricoDesastre
-  - Schemas (Pydantic) com validações
-  - Endpoints: `/api/v1/desastres/`, `/api/v1/historico/`
+  - JPA Entities: TipoDesastre, Desastre, HistoricoDesastre
+  - DTOs com validações
+  - Endpoints: `/api/v1/desastres`, `/api/v1/historico`
   - Sistema de categorização (enchente, deslizamento, incêndio, etc.)
 
 - [ ] **Módulo `alerts` - Alertas**
-  - Models (SQLAlchemy): Alerta, NivelRisco
+  - JPA Entities: Alerta, AlertaUsuario
   - Sistema de priorização de alertas
-  - Endpoints: `/api/v1/alertas/`, `/api/v1/alertas/ativos/`
+  - Endpoints: `/api/v1/alertas`, `/api/v1/alertas/ativos`
   - Filtros por localização e tipo
 
 - [ ] **Integração com APIs externas**
   - INMET (meteorologia)
   - CEMADEN (alertas de desastres)
   - INPE (queimadas)
-  - Usar httpx async para requisições
-  - Background tasks com FastAPI BackgroundTasks
-  - Sistema de cache com Redis
+  - Usar `RestTemplate` ou `WebClient` para requisições
+  - Tasks agendadas com `@Scheduled`
+  - Cache com Spring Data Redis (`@Cacheable`)
 
 - [ ] **Documentação da API**
-  - Swagger UI automático do FastAPI
-  - ReDoc automático
-  - Documentar schemas Pydantic
-  - Exemplos de requisições e respostas
+  - SpringDoc OpenAPI (Swagger UI automático em `/swagger-ui.html`)
+  - Anotações `@Operation`, `@ApiResponse` nos controllers
+  - Exemplos de requisições e respostas nos DTOs
   - Versionamento da API (v1)
 
 ### 🟡 Backend - Prioridade Média
 
 - [ ] **Módulo `users` - Autenticação**
-  - JWT com python-jose
-  - OAuth2 com Password Flow
-  - Models: User, UserProfile, UserPreferences
-  - Endpoints: `/api/v1/auth/register/`, `/api/v1/auth/login/`
-  - Sistema de permissões com dependencies
+  - Spring Security + JWT (jjwt)
+  - `JwtTokenProvider` + `JwtAuthenticationFilter`
+  - JPA Entities: User, UserProfile, UserPreferences
+  - Endpoints: `/api/v1/auth/register`, `/api/v1/auth/login`
+  - Sistema de roles (`ROLE_USER`, `ROLE_ADMIN`) via `SecurityFilterChain`
 
 - [ ] **Módulo `notifications` - Notificações**
-  - Models: Notification, NotificationPreference
-  - Integração com Firebase Cloud Messaging (async)
+  - JPA Entities: Notification, NotificationPreference
+  - Integração com Firebase Cloud Messaging
   - Sistema de templates de notificação
-  - Endpoints: `/api/v1/notificacoes/`
-  - Background tasks para envio assíncrono
+  - Endpoints: `/api/v1/notificacoes`
+  - Envio assíncrono com `@Async`
 
 - [ ] **Sistema de busca avançada**
-  - Elasticsearch ou PostgreSQL Full-Text Search
+  - PostgreSQL Full-Text Search ou Spring Data Specifications
   - Busca por cidade, bairro, tipo de desastre
   - Autocomplete para busca
 
 - [ ] **Testes automatizados**
-  - Testes com pytest + pytest-asyncio
-  - TestClient do FastAPI
-  - Testes de integração
-  - Coverage mínimo de 80%
+  - JUnit 5 + Mockito (unitários de services)
+  - `@SpringBootTest` + `MockMvc` (integração de controllers)
+  - `@DataJpaTest` + H2 (repositórios)
+  - Coverage mínimo de 80% (JaCoCo)
   - CI/CD com GitHub Actions
 
 ### 🟢 Backend - Prioridade Baixa
 
 - [ ] **Sistema de relatórios**
-  - Geração de PDFs com dados estatísticos
+  - Geração de PDFs com JasperReports ou iText
   - Exportação de dados (CSV, JSON)
   - Dashboard administrativo customizado
 
@@ -263,7 +253,7 @@ backend/
   - Validação de informações
 
 - [ ] **WebSockets para alertas em tempo real**
-  - WebSockets nativos do FastAPI
+  - Spring WebSocket com STOMP
   - Notificações push instantâneas
   - Status de conexão
   - Broadcast de alertas
@@ -361,7 +351,7 @@ mobile/
 
 ### Frontend Web
 
-- [ ] **Integrar com backend FastAPI**
+- [ ] **Integrar com backend Spring Boot**
   - Substituir dados mockados por API calls
   - Implementar autenticação JWT
   - Gerenciamento de estado global (Context API ou Zustand)
@@ -376,16 +366,16 @@ mobile/
 ### Backend
 
 - [ ] **Deploy backend**
-  - Railway, Render, ou AWS/GCP
+  - Railway, Render, AWS (ECS) ou Google Cloud Run
   - PostgreSQL em produção
   - Redis para cache
-  - Uvicorn com workers
+  - Docker image com Spring Boot
   - Configurar domínio e SSL
 
 - [ ] **Monitoramento**
-  - Sentry para error tracking
-  - Logs estruturados
-  - Métricas de performance
+  - Spring Boot Actuator + Sentry
+  - Logs estruturados (Logback + JSON)
+  - Métricas de performance (Micrometer)
   - Uptime monitoring
 
 ### Mobile
@@ -403,7 +393,7 @@ mobile/
 | Fase | Duração | Descrição |
 |------|---------|-----------|
 | **Fase 1** | 2 semanas | Correções críticas do frontend |
-| **Fase 2** | 4 semanas | Backend Django completo |
+| **Fase 2** | 4-5 semanas | Backend Spring Boot completo |
 | **Fase 3** | 4 semanas | Mobile React Native |
 | **Fase 4** | 2 semanas | Integração e deploy |
 | **Total** | **12 semanas** | ~3 meses para MVP completo |
@@ -431,22 +421,25 @@ mobile/
 - React Query
 
 ### Backend
-- Python 3.11+
-- FastAPI 0.104+
-- SQLAlchemy 2.0 (async)
-- PostgreSQL + asyncpg
-- Redis (cache)
-- Pydantic v2
-- JWT Authentication (python-jose)
-- Swagger/OpenAPI (automático)
+- Java 17
+- Spring Boot 3.2+
+- Spring Data JPA / Hibernate
+- PostgreSQL (JDBC)
+- Redis (Spring Data Redis)
+- Bean Validation (Jakarta)
+- Spring Security + JWT (jjwt)
+- SpringDoc OpenAPI (Swagger UI automático)
+- Flyway (migrações)
+- Docker + Docker Compose
 
 ### DevOps
 - Git + GitHub
 - GitHub Actions (CI/CD)
 - Docker + Docker Compose
 - Vercel/Netlify (frontend)
-- Railway/Render (backend)
-- Sentry (monitoring)
+- Railway/Render/AWS (backend)
+- Sentry + Spring Boot Actuator (monitoring)
+- Maven (build)
 
 ---
 
@@ -455,7 +448,7 @@ mobile/
 | Serviço | Tier Gratuito | Tier Pago |
 |---------|---------------|------------|
 | **Frontend (Vercel)** | ✅ Ilimitado | - |
-| **Backend (Railway)** | $5 crédito | $10-30/mês |
+| **Backend (Railway/Render)** | $5 crédito | $10-30/mês |
 | **PostgreSQL (Supabase)** | ✅ 500MB | $25/mês |
 | **Redis (Upstash)** | ✅ 10k req/dia | $10/mês |
 | **Firebase (notificações)** | ✅ Generoso | $25/mês |
@@ -494,12 +487,12 @@ mobile/
 
 1. ✅ Revisar e aprovar este plano
 2. 🔄 Executar correções críticas do frontend (Fase 1)
-3. ⚡ Iniciar estrutura do backend FastAPI
+3. ⚡ Iniciar estrutura do backend Spring Boot (repositório separado)
 4. 📱 Planejar arquitetura do mobile
 5. 🔄 Configurar repositório com estrutura de monorepo
 
 ---
 
-**Última atualização:** 11/11/2025  
-**Versão do projeto:** 0.0.0  
+**Última atualização:** Março 2026  
+**Versão do projeto:** 0.1.0  
 **Status:** Em desenvolvimento ativo

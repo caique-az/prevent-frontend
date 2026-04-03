@@ -3,6 +3,7 @@ import MapComponent from '../../components/Map';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import { useParams } from 'react-router-dom';
+import { useState, useRef } from 'react';
 import { Doughnut } from 'react-chartjs-2';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 
@@ -40,6 +41,7 @@ const cityData = {
         neighborhoods: [
             {
                 name: 'Beira Rio',
+                coordinates: [-19.8200, -43.9580],
                 risk: 'Enchentes',
                 tips: [
                     'Evite construir a menos de 30m das margens do rio.',
@@ -52,6 +54,7 @@ const cityData = {
             },
             {
                 name: 'Morro do Valtair',
+                coordinates: [-19.8100, -43.9420],
                 risk: 'Deslizamentos',
                 tips: [
                     'Observe trincas, árvores inclinadas e estalos no solo.',
@@ -62,6 +65,7 @@ const cityData = {
             },
             {
                 name: 'Bairro Novo Horizonte',
+                coordinates: [-19.8180, -43.9500],
                 risk: 'Inundações',
                 tips: [
                     'Evite trafegar por vias com histórico de alagamento.',
@@ -72,6 +76,7 @@ const cityData = {
             },
             {
                 name: 'Alto da Serra',
+                coordinates: [-19.8050, -43.9380],
                 risk: 'Deslizamentos',
                 tips: [
                     'Evite construções em áreas de encosta.',
@@ -82,6 +87,7 @@ const cityData = {
             },
             {
                 name: 'Jardim das Águas',
+                coordinates: [-19.8220, -43.9550],
                 risk: 'Enchentes e alagamentos',
                 tips: [
                     'Evite jogar lixo nas ruas e bueiros.',
@@ -92,6 +98,7 @@ const cityData = {
             },
             {
                 name: 'Vale Verde',
+                coordinates: [-19.8150, -43.9600],
                 risk: 'Enchentes e erosões',
                 tips: [
                     'Reforce muros e fundações vulneráveis.',
@@ -146,6 +153,7 @@ const cityData = {
         neighborhoods: [
             {
                 name: 'Vila Mariana',
+                coordinates: [-23.5880, -46.6390],
                 risk: 'Enchentes',
                 tips: [
                     'Evite áreas baixas durante chuvas intensas.',
@@ -158,6 +166,7 @@ const cityData = {
             },
             {
                 name: 'Lapa',
+                coordinates: [-23.5280, -46.7020],
                 risk: 'Alagamentos',
                 tips: [
                     'Evite transitar por ruas alagadas.',
@@ -168,6 +177,7 @@ const cityData = {
             },
             {
                 name: 'Pinheiros',
+                coordinates: [-23.5640, -46.6990],
                 risk: 'Inundações e queda de árvores',
                 tips: [
                     'Evite áreas com histórico de alagamento.',
@@ -178,6 +188,7 @@ const cityData = {
             },
             {
                 name: 'Mooca',
+                coordinates: [-23.5500, -46.5960],
                 risk: 'Enchentes e deslizamentos',
                 tips: [
                     'Evite ruas com histórico de alagamentos.',
@@ -188,6 +199,7 @@ const cityData = {
             },
             {
                 name: 'Itaim Bibi',
+                coordinates: [-23.5850, -46.6820],
                 risk: 'Enchentes',
                 tips: [
                     'Evite circular a pé ou de carro durante fortes chuvas.',
@@ -198,6 +210,7 @@ const cityData = {
             },
             {
                 name: 'Butantã',
+                coordinates: [-23.5730, -46.7280],
                 risk: 'Deslizamentos e alagamentos',
                 tips: [
                     'Evite moradias próximas a encostas.',
@@ -252,6 +265,7 @@ const cityData = {
         neighborhoods: [
             {
                 name: 'Copacabana',
+                coordinates: [-22.9711, -43.1822],
                 risk: 'Enchentes',
                 tips: [
                     'Evite áreas alagadas.',
@@ -262,6 +276,7 @@ const cityData = {
             },
             {
                 name: 'Jardim Botânico',
+                coordinates: [-22.9660, -43.2250],
                 risk: 'Deslizamentos',
                 tips: [
                     'Evite áreas próximas a encostas em dias de chuva.',
@@ -272,6 +287,7 @@ const cityData = {
             },
             {
                 name: 'Centro',
+                coordinates: [-22.9035, -43.2096],
                 risk: 'Alagamentos repentinos',
                 tips: [
                     'Evite transitar a pé em vias alagadas.',
@@ -282,6 +298,7 @@ const cityData = {
             },
             {
                 name: 'Grajaú',
+                coordinates: [-22.9200, -43.2600],
                 risk: 'Inundações e deslizamentos',
                 tips: [
                     'Observe sinais de infiltrações em casa.',
@@ -292,6 +309,7 @@ const cityData = {
             },
             { 
                 name: 'Ipanema', 
+                coordinates: [-22.9838, -43.2047], 
                 risk: 'Enchentes', 
                 tips: [
                     'Evite áreas alagadas.', 
@@ -302,6 +320,7 @@ const cityData = {
             },
             { 
                 name: 'Leblon', 
+                coordinates: [-22.9840, -43.2280], 
                 risk: 'Deslizamentos', 
                 tips: [
                     'Evite áreas de risco.', 
@@ -321,6 +340,24 @@ const cityData = {
 function Results() {
     const { city } = useParams();
     const cityInfo = cityData[city] || cityData["Minas Gerais"]; // Default to Espera Feliz if city not found
+    const mapRef = useRef(null);
+
+    // Estado para controlar o centro do mapa
+    const [mapCenter, setMapCenter] = useState(cityInfo.mapCenter);
+    const [mapZoom, setMapZoom] = useState(cityInfo.mapZoom);
+
+    // Função para centralizar o mapa no bairro clicado
+    const handleNeighborhoodClick = (coordinates) => {
+        if (coordinates) {
+            setMapCenter(coordinates);
+            setMapZoom(15);
+            // Scroll suave até o mapa
+            const mapSection = document.querySelector('.maps');
+            if (mapSection) {
+                mapSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        }
+    };
 
     // Dados do gráfico
     const chartData = {
@@ -337,27 +374,32 @@ function Results() {
     return (
         <>
             <Header />
-            <div className="container-fluid px-4 mt-5">
+            <main style={{ flex: 1 }}>
+                <div className="container-fluid px-4 mt-5">
 
                 {/* City Information Section */}
-                <div className="section-container mb-5">
-                    <div className="citysearch row align-items-center">
-                        <div className="flag-space col-lg-4 text-center">
-                            <div className="flag mx-auto" style={{ backgroundImage: `url(${cityInfo.flag})` }}></div>
-                            <h5 className="mt-4">{city}</h5>
+                <div className="city-info-wrapper mb-5">
+                    <div className="row align-items-start">
+                        <div className="col-lg-8">
+                            <div className="section-container">
+                                <div className="flag-and-text-container">
+                                    <div className="flag-space text-center mb-4">
+                                        <div className="flag mx-auto" style={{ backgroundImage: `url(${cityInfo.flag})` }}></div>
+                                        <h5 className="mt-3">{city}</h5>
+                                    </div>
+                                    <div className="city-text-below">
+                                        <p className="city-presentation">{cityInfo.description}</p>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <div className="city-text col-lg-8">
-                            <p className="city-presentation">{cityInfo.description}</p>
-                        </div>
-                    </div>
-                </div>
-
-                {/* Tragedy Chart Section */}
-                <div className="section-container mb-5">
-                    <h2 className="text-center mb-4">Gráfico de Tragédias</h2>
-                    <div className="d-flex justify-content-center">
-                        <div className="chart-container">
-                            <Doughnut data={chartData} />
+                        <div className="col-lg-4">
+                            <div className="tragedy-chart-section">
+                                <h4 className="text-center mb-3">Gráfico de Tragédias</h4>
+                                <div className="chart-container-inline">
+                                    <Doughnut data={chartData} />
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -373,8 +415,8 @@ function Results() {
                     <div className="maps d-flex justify-content-center">
                         <div className="map-space shadow">
                             <MapComponent 
-                                center={cityInfo.mapCenter}
-                                zoom={cityInfo.mapZoom}
+                                center={mapCenter}
+                                zoom={mapZoom}
                                 riskAreas={cityInfo.riskAreas}
                             />
                         </div>
@@ -384,10 +426,15 @@ function Results() {
                 {/* Neighborhoods Section */}
                 <div className="section-container mb-5">
                     <h2 className="text-center mb-4">Bairros com Maior Risco</h2>
+                    <p className="text-center text-muted mb-4">Clique em um bairro para visualizá-lo no mapa</p>
                     <div className="row g-4">
                         {cityInfo.neighborhoods.map((neighborhood, index) => (
                             <div key={index} className="col-lg-4 col-md-6">
-                                <div className="card shadow-sm h-100">
+                                <div 
+                                    className="card shadow-sm h-100 neighborhood-card"
+                                    onClick={() => handleNeighborhoodClick(neighborhood.coordinates)}
+                                    style={{ cursor: 'pointer' }}
+                                >
                                     <div className="card-body">
                                         <h4 className="card-title text-center">{neighborhood.name}</h4>
                                         <h6 className="text-center text-danger">Risco: {neighborhood.risk}</h6>
@@ -403,6 +450,7 @@ function Results() {
                     </div>
                 </div>
             </div>
+            </main>
             <Footer />
         </>
     );

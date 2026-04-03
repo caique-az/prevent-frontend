@@ -1,0 +1,111 @@
+/* ===== LOADING COMPONENT ===== */
+.loading-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+    gap: 20px;
+}
+
+.loading-fullscreen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(5px);
+    z-index: 9999;
+}
+
+/* ===== SPINNER ===== */
+.loading-spinner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.loading-icon {
+    color: #0c6681;
+    animation: spin 1.5s linear infinite;
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* ===== SIZES ===== */
+.loading-small .loading-icon {
+    font-size: 1.5rem;
+}
+
+.loading-small .loading-message {
+    font-size: 0.85rem;
+}
+
+.loading-medium .loading-icon {
+    font-size: 3rem;
+}
+
+.loading-medium .loading-message {
+    font-size: 1rem;
+}
+
+.loading-large .loading-icon {
+    font-size: 5rem;
+}
+
+.loading-large .loading-message {
+    font-size: 1.25rem;
+}
+
+/* ===== MESSAGE ===== */
+.loading-message {
+    color: #4a5568;
+    font-weight: 500;
+    margin: 0;
+    text-align: center;
+}
+
+/* ===== SKELETON LOADING ===== */
+.skeleton {
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+    border-radius: 8px;
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: 200% 0;
+    }
+    100% {
+        background-position: -200% 0;
+    }
+}
+
+.skeleton-text {
+    height: 16px;
+    margin-bottom: 8px;
+}
+
+.skeleton-title {
+    height: 24px;
+    width: 60%;
+    margin-bottom: 16px;
+}
+
+.skeleton-card {
+    height: 200px;
+    width: 100%;
+}
+
+.skeleton-circle {
+    border-radius: 50%;
+}
