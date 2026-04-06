@@ -1,0 +1,422 @@
+/* ===== ROTAS PAGE ===== */
+.rotas-page {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.rotas-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 24px;
+}
+
+/* ===== ANIMATIONS ===== */
+.animate-on-scroll {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.animate-on-scroll.animate-in {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* ===== HERO ===== */
+.rotas-hero {
+    background: linear-gradient(135deg, #0c6681 0%, #054558 100%);
+    padding: 100px 24px 80px;
+    text-align: center;
+}
+
+.rotas-hero-content {
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+.rotas-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255, 255, 255, 0.15);
+    color: white;
+    padding: 10px 22px;
+    border-radius: 50px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.rotas-hero-title {
+    font-size: 3rem;
+    font-weight: 800;
+    color: white;
+    margin-bottom: 16px;
+}
+
+.rotas-hero-subtitle {
+    font-size: 1.15rem;
+    color: rgba(255, 255, 255, 0.9);
+    line-height: 1.7;
+}
+
+/* ===== SECTION COMMON ===== */
+.section-header {
+    text-align: center;
+    margin-bottom: 48px;
+}
+
+.section-badge {
+    display: inline-block;
+    background: linear-gradient(135deg, #0c6681 0%, #054558 100%);
+    color: white;
+    padding: 8px 20px;
+    border-radius: 50px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 16px;
+}
+
+.section-badge-warning {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+    color: white;
+    padding: 8px 20px;
+    border-radius: 50px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 16px;
+}
+
+.section-title {
+    font-size: 2.25rem;
+    font-weight: 800;
+    color: #1a1a2e;
+    margin-bottom: 12px;
+}
+
+.section-subtitle {
+    font-size: 1.05rem;
+    color: #64748b;
+    max-width: 600px;
+    margin: 0 auto;
+    line-height: 1.7;
+}
+
+/* ===== MAP SECTION ===== */
+.rotas-map-section {
+    padding: 60px 0;
+    background: #f8fafc;
+}
+
+.rotas-map-wrapper {
+    background: white;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+.rotas-map-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 24px 32px;
+    border-bottom: 1px solid #e2e8f0;
+    flex-wrap: wrap;
+    gap: 16px;
+}
+
+.rotas-map-header h2 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #1a1a2e;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.rotas-map-header h2 svg {
+    color: #0c6681;
+}
+
+.rotas-map-actions {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.rotas-map-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    background: #f0f9ff;
+    border: 1px solid #0c6681;
+    border-radius: 50px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #0c6681;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.rotas-map-btn:hover,
+.rotas-map-btn.active {
+    background: linear-gradient(135deg, #0c6681 0%, #054558 100%);
+    color: white;
+}
+
+.rotas-map-container {
+    height: 500px;
+    width: 100%;
+}
+
+.rotas-map-legend {
+    display: flex;
+    gap: 24px;
+    padding: 16px 32px;
+    border-top: 1px solid #e2e8f0;
+    flex-wrap: wrap;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.85rem;
+    color: #64748b;
+}
+
+.legend-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+/* ===== PONTOS DE ENCONTRO ===== */
+.rotas-pontos-section {
+    padding: 80px 0;
+    background: white;
+}
+
+.rotas-pontos-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.rotas-ponto-card {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 24px;
+    background: #f8fafc;
+    border-radius: 16px;
+    border: 2px solid transparent;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.rotas-ponto-card:hover {
+    border-color: #0c6681;
+    transform: translateX(4px);
+    box-shadow: 0 4px 20px rgba(12, 102, 129, 0.15);
+}
+
+.rotas-ponto-card.active {
+    border-color: #0c6681;
+    background: #f0f9ff;
+}
+
+.rotas-ponto-icon {
+    width: 56px;
+    height: 56px;
+    background: linear-gradient(135deg, #0c6681 0%, #054558 100%);
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.25rem;
+    flex-shrink: 0;
+}
+
+.rotas-ponto-content {
+    flex: 1;
+}
+
+.rotas-ponto-content h3 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #1a1a2e;
+    margin: 0 0 4px 0;
+}
+
+.rotas-ponto-endereco {
+    font-size: 0.9rem;
+    color: #64748b;
+    margin: 0 0 4px 0;
+}
+
+.rotas-ponto-capacidade {
+    font-size: 0.85rem;
+    color: #0c6681;
+    font-weight: 600;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.rotas-ponto-action {
+    color: #0c6681;
+    font-size: 1rem;
+    transition: transform 0.3s ease;
+}
+
+.rotas-ponto-card:hover .rotas-ponto-action {
+    transform: translateX(4px);
+}
+
+/* ===== ÁREAS DE RISCO ===== */
+.rotas-risco-section {
+    padding: 80px 0;
+    background: #f8fafc;
+}
+
+.rotas-risco-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+    max-width: 800px;
+    margin: 0 auto 48px;
+}
+
+.rotas-risco-card {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 20px 24px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    transition: all 0.3s ease;
+}
+
+.rotas-risco-card:hover {
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+}
+
+.rotas-risco-indicator {
+    width: 6px;
+    height: 48px;
+    border-radius: 3px;
+    flex-shrink: 0;
+}
+
+.rotas-risco-content h4 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #1a1a2e;
+    margin: 0 0 4px 0;
+}
+
+.rotas-risco-tipo {
+    font-size: 0.85rem;
+    color: #64748b;
+}
+
+/* ===== EMERGÊNCIA ===== */
+.rotas-emergencia {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 24px 32px;
+    background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+    border-radius: 16px;
+    border: 2px solid #f59e0b;
+}
+
+.rotas-emergencia-icon {
+    font-size: 2rem;
+    color: #d97706;
+}
+
+.rotas-emergencia h3 {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #1a1a2e;
+    margin: 0 0 4px 0;
+}
+
+.rotas-emergencia p {
+    font-size: 0.95rem;
+    color: #64748b;
+    margin: 0;
+}
+
+.rotas-emergencia strong {
+    color: #d97706;
+    font-size: 1.25rem;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+    .rotas-hero {
+        padding: 80px 20px 60px;
+    }
+
+    .rotas-hero-title {
+        font-size: 2rem;
+    }
+
+    .rotas-map-header {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 20px;
+    }
+
+    .rotas-map-container {
+        height: 350px;
+    }
+
+    .rotas-map-legend {
+        padding: 12px 20px;
+        gap: 16px;
+    }
+
+    .rotas-ponto-card {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .rotas-ponto-action {
+        display: none;
+    }
+
+    .rotas-pontos-section,
+    .rotas-risco-section {
+        padding: 48px 0;
+    }
+
+    .rotas-emergencia {
+        flex-direction: column;
+        text-align: center;
+    }
+}

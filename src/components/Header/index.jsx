@@ -34,7 +34,7 @@ function Header() {
         'jardim das aguas': 'Minas Gerais',
         'jardim das águas': 'Minas Gerais',
         'vale verde': 'Minas Gerais',
-        
+
         // São Paulo
         'vila mariana': 'São Paulo',
         'lapa': 'São Paulo',
@@ -44,7 +44,7 @@ function Header() {
         'itaim': 'São Paulo',
         'butanta': 'São Paulo',
         'butantã': 'São Paulo',
-        
+
         // Rio de Janeiro
         'copacabana': 'Rio de Janeiro',
         'jardim botanico': 'Rio de Janeiro',
@@ -71,26 +71,22 @@ function Header() {
         const value = searchTerm.trim().toLowerCase();
         if (!value) return;
 
-        // Normalizar o valor de busca
         const normalizedValue = value.normalize('NFD').replace(/[^\w\s]/g, '').toLowerCase();
 
-        // Primeiro, tentar encontrar um estado
         const matchedEstado = estadoMap[value];
         if (matchedEstado) {
             navigate(`/results/${matchedEstado}`);
             return;
         }
 
-        // Se não encontrou estado, tentar encontrar um bairro
-        const matchedBairro = bairroToEstado[value] || 
-                             bairroToEstado[normalizedValue];
-        
+        const matchedBairro = bairroToEstado[value] ||
+            bairroToEstado[normalizedValue];
+
         if (matchedBairro) {
             navigate(`/results/${matchedBairro}`);
             return;
         }
 
-        // Se não encontrou nada, ir para página de sem resultados
         navigate('/no-results');
     };
 
@@ -150,7 +146,7 @@ function Header() {
                             const filteredBairros = Object.keys(bairroToEstado)
                                 .filter((bairro) => normalizedIncludes(bairro, term))
                                 .map(bairro => ({
-                                    name: bairro.split(' ').map(word => 
+                                    name: bairro.split(' ').map(word =>
                                         word.charAt(0).toUpperCase() + word.slice(1)
                                     ).join(' '),
                                     estado: bairroToEstado[bairro]
@@ -206,10 +202,17 @@ function Header() {
                     </button>
                     <ul className="dropdown-menu custom-dropdown" aria-labelledby="menuDropdown">
                         <li>
-                            <Link className="dropdown-item" to="/Projects">Sobre o Projeto</Link>
+                            <Link className="dropdown-item" to="/projects">Sobre o Projeto</Link>
                         </li>
                         <li>
-                            <Link className="dropdown-item" to="/Configurations">Configurações</Link>
+                            <Link className="dropdown-item" to="/rotas-seguras">Rotas Seguras</Link>
+                        </li>
+                        <li><hr className="dropdown-divider" /></li>
+                        <li>
+                            <Link className="dropdown-item" to="/configurations">Configurações</Link>
+                        </li>
+                        <li>
+                            <Link className="dropdown-item" to="/contact">Contato</Link>
                         </li>
                     </ul>
                 </div>
