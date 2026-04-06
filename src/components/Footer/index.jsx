@@ -1,10 +1,10 @@
 import "./footer.css"
 import { Link } from "react-router-dom"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { 
-    faTornado, 
-    faEnvelope, 
-    faPhone, 
+import {
+    faTornado,
+    faEnvelope,
+    faPhone,
     faMapMarkerAlt,
     faArrowRight,
     faHeart
@@ -20,7 +20,6 @@ function Footer() {
         if (email) {
             setSubscribed(true);
             setEmail('');
-            // Aqui será integrado com a API futuramente
             setTimeout(() => setSubscribed(false), 3000);
         }
     };
@@ -36,6 +35,8 @@ function Footer() {
 
     const resources = [
         { name: 'Sobre o Projeto', path: '/projects' },
+        { name: 'Rotas Seguras', path: '/rotas-seguras' },
+        { name: 'Dicas de Segurança', path: '/dicas-seguranca' },
         { name: 'Configurações', path: '/configurations' },
         { name: 'Contato', path: '/contact' },
     ];
@@ -53,7 +54,7 @@ function Footer() {
                                 <span>Prevent</span>
                             </Link>
                             <p className="footer-description">
-                                Sistema de prevenção e monitoramento de desastres naturais. 
+                                Sistema de prevenção e monitoramento de desastres naturais.
                                 Protegendo comunidades com informações em tempo real.
                             </p>
                             <div className="footer-contact">
