@@ -207,6 +207,9 @@ function Header() {
                         <li>
                             <Link className="dropdown-item" to="/rotas-seguras">Rotas Seguras</Link>
                         </li>
+                        <li>
+                            <Link className="dropdown-item" to="/dicas-seguranca">Dicas de Segurança</Link>
+                        </li>
                         <li><hr className="dropdown-divider" /></li>
                         <li>
                             <Link className="dropdown-item" to="/configurations">Configurações</Link>

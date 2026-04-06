@@ -5,6 +5,7 @@ import Project from "../pages/Project";
 import Configurations from "../pages/Configurations";
 import Historico from "../pages/Historico";
 import RotasSeguras from "../pages/RotasSeguras";
+import DicasSeguranca from "../pages/DicasSeguranca";
 import NoResults from "../pages/NoResults";
 import NotFound from "../pages/NotFound";
 import Contact from "../pages/Contact";
@@ -21,6 +22,7 @@ function AppRoutes() {
                     <Route path="/configurations" element={<Configurations />} />
                     <Route path="/historico/:estado" element={<Historico />} />
                     <Route path="/rotas-seguras" element={<RotasSeguras />} />
+                    <Route path="/dicas-seguranca" element={<DicasSeguranca />} />
                     <Route path="/no-results" element={<NoResults />} />
                     <Route path="/contact" element={<Contact />} />
                     {/* Rota 404 - deve ser a última */}
