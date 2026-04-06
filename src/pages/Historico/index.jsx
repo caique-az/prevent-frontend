@@ -6,9 +6,8 @@ import Footer from "../../components/Footer";
 import "./main.css";
 
 function Historico() {
-    const { estado } = useParams(); // Captura o estado da URL
+    const { estado } = useParams();
 
-    // Dados das cidades e alertas
     const dados = {
         "São Paulo": [
             { nome: "Maua", localizacao: "São Paulo", data: "2025-05-01", alerta: "Enchente" },
@@ -27,10 +26,8 @@ function Historico() {
         ],
     };
 
-    // Filtra os dados com base no estado recebido
     const historicos = dados[estado] || [];
 
-    // Define a cor do ícone com base no alerta
     const getIconColor = (alerta) => {
         switch (alerta.toLowerCase()) {
             case "enchente":
@@ -59,29 +56,29 @@ function Historico() {
                 </div>
                 <table className="historico-table">
                     <thead>
-                        <tr>
-                            <th>Nome</th>
-                            <th>Localização</th>
-                            <th>Data</th>
-                            <th>Alerta</th>
-                            <th>Estado</th>
-                        </tr>
+                    <tr>
+                        <th>Nome</th>
+                        <th>Localização</th>
+                        <th>Data</th>
+                        <th>Alerta</th>
+                        <th>Estado</th>
+                    </tr>
                     </thead>
                     <tbody>
-                        {historicos.map((item, index) => (
-                            <tr key={index}>
-                                <td>{item.nome}</td>
-                                <td>{item.localizacao}</td>
-                                <td>{item.data}</td>
-                                <td className={`alerta ${item.alerta.toLowerCase()}`}>{item.alerta}</td>
-                                <td>
-                                    <FontAwesomeIcon
-                                        icon={faCircle}
-                                        style={{ color: getIconColor(item.alerta) }}
-                                    />
-                                </td>
-                            </tr>
-                        ))}
+                    {historicos.map((item, index) => (
+                        <tr key={index}>
+                            <td>{item.nome}</td>
+                            <td>{item.localizacao}</td>
+                            <td>{item.data}</td>
+                            <td className={`alerta ${item.alerta.toLowerCase()}`}>{item.alerta}</td>
+                            <td>
+                                <FontAwesomeIcon
+                                    icon={faCircle}
+                                    style={{ color: getIconColor(item.alerta) }}
+                                />
+                            </td>
+                        </tr>
+                    ))}
                     </tbody>
                 </table>
             </div>

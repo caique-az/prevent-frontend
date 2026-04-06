@@ -7,11 +7,11 @@ import {
     faFirstAid,
     faPhoneAlt,
     faFireExtinguisher,
-    faTruckMedical,
+    faAmbulance,
     faExclamationTriangle,
     faCheckCircle,
     faLightbulb,
-    faHandsHelping
+    faHandHoldingHeart
 } from '@fortawesome/free-solid-svg-icons';
 import './main.css';
 
@@ -47,7 +47,7 @@ function DicasSeguranca() {
         },
         {
             titulo: 'Após a Emergência',
-            icon: faHandsHelping,
+            icon: faHandHoldingHeart,
             color: '#10b981',
             bgColor: '#d1fae5',
             dicas: [
@@ -62,7 +62,7 @@ function DicasSeguranca() {
     ];
 
     const emergencias = [
-        { nome: 'SAMU', numero: '192', icon: faTruckMedical, color: '#e74c3c' },
+        { nome: 'SAMU', numero: '192', icon: faAmbulance, color: '#e74c3c' },
         { nome: 'Defesa Civil', numero: '199', icon: faShieldAlt, color: '#0c6681' },
         { nome: 'Bombeiros', numero: '193', icon: faFireExtinguisher, color: '#f59e0b' },
         { nome: 'Polícia Militar', numero: '190', icon: faExclamationTriangle, color: '#3b82f6' },
@@ -81,7 +81,6 @@ function DicasSeguranca() {
         'Cobertor térmico',
     ];
 
-    // Animação ao scroll
     const observerRef = useRef(null);
 
     useEffect(() => {

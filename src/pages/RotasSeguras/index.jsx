@@ -11,8 +11,8 @@ import {
     faExclamationTriangle,
     faPhone,
     faShieldAlt,
-    faPersonWalking,
-    faLocationDot,
+    faUsers,
+    faMapPin,
     faArrowRight
 } from '@fortawesome/free-solid-svg-icons';
 import './main.css';
@@ -44,7 +44,6 @@ const pontosEncontro = [
         posicao: [-23.5505, -46.6333],
         endereco: 'Rua Principal, 100 - Centro',
         capacidade: '500 pessoas',
-        tipo: 'encontro'
     },
     {
         id: 2,
@@ -52,7 +51,6 @@ const pontosEncontro = [
         posicao: [-23.555, -46.638],
         endereco: 'Av. das Palmeiras, 250 - Vila Nova',
         capacidade: '300 pessoas (área coberta)',
-        tipo: 'encontro'
     },
     {
         id: 3,
@@ -60,7 +58,6 @@ const pontosEncontro = [
         posicao: [-23.548, -46.630],
         endereco: 'Rua dos Esportes, 500 - Jardim América',
         capacidade: '800 pessoas',
-        tipo: 'encontro'
     },
 ];
 
@@ -97,7 +94,6 @@ function RotasSeguras() {
     const [mapZoom, setMapZoom] = useState(13);
     const [pontoAtivo, setPontoAtivo] = useState(null);
 
-    // Animação ao scroll
     const observerRef = useRef(null);
 
     useEffect(() => {
@@ -166,7 +162,7 @@ function RotasSeguras() {
                                             className={`rotas-map-btn ${pontoAtivo === ponto.id ? 'active' : ''}`}
                                             onClick={() => handlePontoClick(ponto)}
                                         >
-                                            <FontAwesomeIcon icon={faLocationDot} />
+                                            <FontAwesomeIcon icon={faMapPin} />
                                             {ponto.nome.split(' ').slice(0, 2).join(' ')}
                                         </button>
                                     ))}
@@ -184,7 +180,6 @@ function RotasSeguras() {
                                     />
                                     <MapFlyTo center={mapCenter} zoom={mapZoom} />
 
-                                    {/* Pontos de encontro */}
                                     {pontosEncontro.map((ponto) => (
                                         <Marker key={ponto.id} position={ponto.posicao}>
                                             <Popup>
@@ -201,7 +196,6 @@ function RotasSeguras() {
                                         </Marker>
                                     ))}
 
-                                    {/* Áreas de risco */}
                                     {areasRisco.map((area) => (
                                         <Polyline
                                             key={area.id}
@@ -214,7 +208,7 @@ function RotasSeguras() {
                                         >
                                             <Popup>
                                                 <div style={{ textAlign: 'center' }}>
-                                                    <strong>⚠️ {area.nome}</strong>
+                                                    <strong>{area.nome}</strong>
                                                 </div>
                                             </Popup>
                                         </Polyline>
@@ -266,7 +260,7 @@ function RotasSeguras() {
                                         <h3>{ponto.nome}</h3>
                                         <p className="rotas-ponto-endereco">{ponto.endereco}</p>
                                         <p className="rotas-ponto-capacidade">
-                                            <FontAwesomeIcon icon={faPersonWalking} />
+                                            <FontAwesomeIcon icon={faUsers} />
                                             {ponto.capacidade}
                                         </p>
                                     </div>
@@ -305,14 +299,13 @@ function RotasSeguras() {
                                     <div className="rotas-risco-content">
                                         <h4>{area.nome}</h4>
                                         <span className="rotas-risco-tipo">
-                                            {area.tipo === 'enchente' ? '🌊 Enchente' : '⛰️ Deslizamento'}
+                                            {area.tipo === 'enchente' ? 'Enchente' : 'Deslizamento'}
                                         </span>
                                     </div>
                                 </div>
                             ))}
                         </div>
 
-                        {/* Emergência */}
                         <div className="rotas-emergencia animate-on-scroll">
                             <FontAwesomeIcon icon={faPhone} className="rotas-emergencia-icon" />
                             <div>
