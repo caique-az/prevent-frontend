@@ -6,11 +6,14 @@ Prevent is a React-based web application designed to assist in monitoring and pr
 
 ## 🚀 Features
 
-- 🗺️ Interactive map with risk areas
+- 🗺️ Interactive map with risk areas and evacuation routes
 - 📊 Precipitation and weather condition charts
 - 🔍 Real-time natural disaster monitoring
 - 📱 Responsive and intuitive interface
 - 📈 Event history and alerts
+- 🛡️ Safety tips for before, during, and after emergencies
+- 🚦 Safe routes and meeting points for evacuation
+- 📬 Contact form for feedback and support
 
 ## 🛠️ Tech Stack
 
@@ -41,7 +44,7 @@ Prevent is a React-based web application designed to assist in monitoring and pr
 1. Clone the repository:
    ```bash
    git clone [REPOSITORY_URL]
-   cd Challenge2
+   cd prevent-frontend
    ```
 
 2. Install dependencies:
@@ -64,19 +67,40 @@ Prevent is a React-based web application designed to assist in monitoring and pr
 ```
 src/
 ├── components/      # Reusable components
+│   ├── ErrorBoundary/
+│   ├── Footer/
+│   ├── Header/
+│   ├── Loading/
+│   └── Map/
 ├── pages/           # Application pages
+│   ├── Configurations/
+│   ├── Contact/
+│   ├── DicasSeguranca/
+│   ├── Historico/
+│   ├── Home/
+│   ├── NoResults/
+│   ├── NotFound/
+│   ├── Project/
+│   ├── Results/
+│   └── RotasSeguras/
+├── Routes/
+│   └── routes.jsx   # Routing configuration
 ├── App.jsx          # Root component
-├── main.jsx         # Entry point
-└── routes.jsx       # Routing configuration
+└── main.jsx         # Entry point
 ```
 
 ## 🌐 Available Routes
 
 - `/` - Home page
-- `/results` - Monitoring and results
+- `/results/:city` - Monitoring and results for a given city/state
 - `/projects` - Related projects
 - `/configurations` - System settings
-- `/historico` - Event history
+- `/historico/:estado` - Event history for a given state
+- `/rotas-seguras` - Safe evacuation routes and meeting points
+- `/dicas-seguranca` - Safety tips for emergencies
+- `/contact` - Contact form
+- `/no-results` - No results found page
+- `*` - 404 Not Found
 
 ## 🛠️ Development
 
